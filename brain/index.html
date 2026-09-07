@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🧠 BRAIN · ROOT</title>
+<style>
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body {
+    background:#05070e; color:#c0d0d0; font-family:'Segoe UI','Consolas',monospace;
+    min-height:100vh; display:flex; flex-direction:column;
+  }
+  #master { display:flex; flex:1; height:100vh; overflow:hidden; }
+  #nav {
+    width:300px; min-width:260px; background:rgba(6,8,16,0.92); backdrop-filter:blur(12px);
+    border-right:1px solid rgba(120,220,150,0.08); padding:16px 14px; overflow-y:auto;
+  }
+  #nav .brand {
+    font-size:17px; font-weight:300; letter-spacing:3px;
+    background:linear-gradient(135deg,#7ee0a0,#d8f0c0,#b388ff); -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent; padding-bottom:10px;
+    border-bottom:1px solid rgba(120,220,150,0.06); margin-bottom:10px;
+  }
+  .nav-section { margin-bottom:10px; }
+  .nav-section .head { font-size:9.5px; text-transform:uppercase; letter-spacing:1.5px; color:#4a6a5a;
+    padding-bottom:4px; border-bottom:1px solid rgba(120,220,150,0.04); margin-bottom:6px; }
+  .nav-item { display:flex; align-items:center; gap:8px; padding:5px 8px; border-radius:6px;
+    font-size:11.5px; color:#8aa8a0; cursor:pointer; border-left:2px solid transparent; }
+  .nav-item:hover { background:rgba(120,220,150,0.05); color:#d0e8e0; border-left-color:#7ee0a0; }
+  .nav-item.active { background:rgba(120,220,150,0.06); border-left-color:#f0d080; color:#f0d080; }
+
+  #stage { flex:1; position:relative; overflow:hidden; }
+  #stage3d { width:100%; height:100%; perspective:1400px; }
+  #orbitInner { width:100%; height:100%; position:relative; transform-style:preserve-3d;
+    transform:rotateX(-16deg) rotateY(20deg); }
+  #meshLayer { position:absolute; left:50%; top:50%; transform-style:preserve-3d; }
+  .mesh-point { position:absolute; width:7px; height:7px; margin:-3.5px 0 0 -3.5px; border-radius:50%; }
+
+  .screen { position:absolute; left:50%; top:50%; width:170px; height:240px; margin:-120px 0 0 -85px;
+    border:2px solid rgba(0,0,0,0.6); transition:transform 0.6s cubic-bezier(.2,.9,.25,1.05);
+    display:flex; align-items:flex-end; justify-content:center; padding-bottom:6px;
+    font-size:10px; color:rgba(0,0,0,0.6); cursor:pointer; }
+  #s0 { background:linear-gradient(135deg,#12c2e9,#0057ff); }
+  #s1 { background:linear-gradient(135deg,#ff2fa0,#b8006b); }
+  #s2 { background:rgba(255,255,255,0.14); backdrop-filter:blur(3px); }
+
+  #status { position:absolute; top:14px; right:18px; background:rgba(0,0,0,0.6); backdrop-filter:blur(8px);
+    border-radius:12px; padding:8px 16px; font-size:10.5px; color:#6a8a7a; border:1px solid rgba(120,220,150,0.06);
+    line-height:1.6; text-align:right; min-width:140px; }
+  #status .val { color:#a0e0b0; font-weight:bold; }
+  #status .gold { color:#f0d080; }
+
+  #cmdBar { position:absolute; bottom:14px; left:18px; right:18px; background:rgba(0,0,0,0.5);
+    backdrop-filter:blur(4px); border-radius:10px; padding:8px 14px; font-size:10.5px; color:#5a7a6a;
+    border:1px solid rgba(120,220,150,0.04); display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
+  #cmdBar input { background:rgba(20,28,20,0.6); border:1px solid rgba(120,220,150,0.15); border-radius:8px;
+    padding:4px 10px; color:#d0e8e0; font-family:inherit; font-size:10.5px; }
+  #cmdBar button { background:rgba(20,28,20,0.6); border:1px solid rgba(120,220,150,0.15); border-radius:8px;
+    padding:4px 12px; color:#c0d8c8; font-family:inherit; font-size:10.5px; cursor:pointer; }
+  #cmdBar button:hover { border-color:#7ee0a0; color:#fff; }
+</style>
+</head>
+<body>
+
+<div id="master">
+  <div id="nav">
+    <div class="brand">🧠 BRAIN <small style="font-size:9px;-webkit-text-fill-color:#4a5a6a;">ROOT · ECHTES ROUTING</small></div>
+
+    <div class="nav-section">
+      <div class="head">📦 KERN / CORE</div>
+      <div class="nav-item" data-target="core">⚙ core (vec, NC-Suite, axiom.map)</div>
+      <div class="nav-item" data-target="hdf">💾 hdf (d/e/i/n/o/r/s/u/w)</div>
+    </div>
+    <div class="nav-section">
+      <div class="head">🧩 MODULE</div>
+      <div class="nav-item" data-target="boerse">📈 BOERSE</div>
+      <div class="nav-item" data-target="dom">🏛 DOM</div>
+      <div class="nav-item" data-target="eos">🌌 EOS</div>
+      <div class="nav-item" data-target="evo">🔮 EVO</div>
+      <div class="nav-item" data-target="markt">🏪 MARKT</div>
+      <div class="nav-item" data-target="respo">🌀 RESPO</div>
+      <div class="nav-item" data-target="tool48">🛠 TOOL48</div>
+    </div>
+    <div class="nav-section">
+      <div class="head">📐 ACHSEN</div>
+      <div class="nav-item" data-target="breite">↔ BREITE</div>
+      <div class="nav-item" data-target="tiefe">↕ TIEFE</div>
+      <div class="nav-item" data-target="hoch">↗ HOCH</div>
+    </div>
+  </div>
+
+  <div id="stage">
+    <div id="stage3d"><div id="orbitInner">
+      <div class="screen" id="s0" data-nav="boerse">BOERSE · 0°</div>
+      <div class="screen" id="s1" data-nav="dom">DOM · 120°</div>
+      <div class="screen" id="s2" data-nav="evo">EVO · 240°</div>
+      <div id="meshLayer"></div>
+    </div></div>
+
+    <div id="status">
+      <div>🧠 BRAIN <span class="val" id="stModul">ROOT</span></div>
+      <div>🌀 RESPO <span class="val" id="stRespo">–</span></div>
+      <div>⏱ ZEIT <span class="gold" id="stTime">0.0s</span></div>
+      <div>🌐 GESAMT (alle Module) <span class="gold" id="stGlobal">–</span></div>
+    </div>
+
+    <div id="cmdBar">
+      <span>⚙️ HDF-RESOLVE:</span>
+      <input id="cmdInput" placeholder="#SLIDE / #HDFRESPO / #ID" value="#SLIDE">
+      <button id="cmdBtn">RESOLVE</button>
+      <span id="cmdOut" style="color:#8cf0d0;"></span>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+// ================================================================
+//  BRAIN index.html — echte Verdrahtung der 7 Gruppen:
+//  1 NC-Suite (Zeit/Kraft/Figur/Space) · 2 VEC · 3 HDF-Resolver
+//  4 RESPO-Mesh · 5 Dreieck-Screens · 6 Stage-Router · 7 axiom.map
+// ================================================================
+import { kernel } from './OS_CORE.js';
+import { MODULES } from './axiom.map.js';
+import { resolve, seedDefaults } from './resolver.js';
+import { createMesh, stepMesh } from './respo.js';
+import { screenTransform, SCREEN_BASE_ANGLES } from './dreieck.js';
+import { initRouter } from './router.js';
+import { autoReport, getGlobalStatus, onUpdate } from '../respo-master.js';
+
+seedDefaults(); // HDF-ROMs mit Beispieldaten befüllen
+
+// ─── Dreieck-Screens (Gruppe 5), Basiswinkel aus NC_figur.js ───
+const screenEls = { 0: document.getElementById('s0'), 1: document.getElementById('s1'), 2: document.getElementById('s2') };
+Object.keys(screenEls).forEach(i => {
+  screenEls[i].style.transform = screenTransform({ baseAngle: SCREEN_BASE_ANGLES[i], radius: 150 });
+});
+
+// ─── RESPO-Mesh (Gruppe 4), Positionen aus core/coord.js (in respo.js verwendet) ──
+const meshLayer = document.getElementById('meshLayer');
+const mesh = createMesh(9, 9);
+mesh.forEach(s => {
+  const el = document.createElement('div');
+  el.className = 'mesh-point';
+  meshLayer.appendChild(el);
+  s.el = el;
+});
+
+// ─── Stage-Router (Gruppe 6) + Module-Karte (Gruppe 7) ─────────
+const router = initRouter((target) => {
+  const mod = MODULES[target] || MODULES.root;
+  document.getElementById('stModul').textContent = mod.label;
+  document.querySelectorAll('.nav-item').forEach(el => el.classList.toggle('active', el.dataset.target === target));
+  kernel.set('activeModule', target);
+});
+
+// Doppelklick = wirklich zum Nachbar-Modul wechseln (z.B. ../BOERSE/index.html),
+// einfacher Klick = nur Status im BRAIN-Dashboard anzeigen (wie ein Hover-Vorschau)
+document.querySelectorAll('.nav-item[data-target]').forEach(item => {
+  item.addEventListener('click', () => router.navigate(item.dataset.target));
+  item.addEventListener('dblclick', () => {
+    const mod = MODULES[item.dataset.target];
+    if (mod && mod.file) window.location.href = mod.file;
+  });
+});
+document.querySelectorAll('.screen[data-nav]').forEach(el => {
+  el.addEventListener('click', () => router.navigate(el.dataset.nav));
+  el.addEventListener('dblclick', () => {
+    const mod = MODULES[el.dataset.nav];
+    if (mod && mod.file) window.location.href = mod.file;
+  });
+});
+
+// Zurück zu STAGE (eine Ebene höher, index.html = NC-Commander)
+const backBtn = document.createElement('div');
+backBtn.textContent = '⇦ zurück zu STAGE';
+backBtn.style.cssText = 'position:absolute;top:14px;left:18px;font-size:11px;color:#7ee0a0;cursor:pointer;background:rgba(0,0,0,0.4);padding:6px 12px;border-radius:8px;border:1px solid rgba(120,220,150,0.15);z-index:5;';
+backBtn.addEventListener('click', () => window.location.href = '../index.html');
+document.getElementById('stage').appendChild(backBtn);
+
+// ─── HDF-Resolver (Gruppe 3) ────────────────────────────────────
+document.getElementById('cmdBtn').addEventListener('click', () => {
+  const cmd = document.getElementById('cmdInput').value.trim();
+  const result = resolve(cmd);
+  document.getElementById('cmdOut').textContent = result
+    ? `✅ ROM ${result.rom} → ${result.value}`
+    : `❌ ${cmd} nicht gefunden`;
+});
+
+// ─── Render-Loop, getaktet über OS_CORE/NC_time (Gruppe 1) ─────
+function loop() {
+  kernel.clock.tick();
+  document.getElementById('stTime').textContent = (kernel.clock.elapsed / 1000).toFixed(1) + 's';
+
+  const avgScore = stepMesh(mesh, 0.05);
+  document.getElementById('stRespo').textContent = Math.round(avgScore * 100) + '%';
+  window.__latestBrainScore = avgScore;
+
+  for (const s of mesh) {
+    const y = -s.value * 20;
+    const rC = Math.round(200 * (1 - s.score) + 40 * s.score);
+    const gC = Math.round(90 + s.score * 140);
+    s.el.style.transform = `translate3d(${s.x}px, ${y}px, ${s.z}px)`;
+    s.el.style.background = `rgba(${rC},${gC},60,0.85)`;
+  }
+  requestAnimationFrame(loop);
+}
+loop();
+
+// ─── Stand-der-Dinge-Kern: BRAIN meldet seinen Score, hört auf alle ──
+autoReport('BRAIN', () => window.__latestBrainScore ?? 0, 2000);
+
+function refreshGlobalDisplay() {
+  const status = getGlobalStatus();
+  const el = document.getElementById('stGlobal');
+  if (status.avg === null) { el.textContent = 'nur BRAIN aktiv'; return; }
+  const names = Object.keys(status.modules).join(', ');
+  el.textContent = `${Math.round(status.avg * 100)}% (${names})`;
+}
+refreshGlobalDisplay();
+onUpdate(refreshGlobalDisplay);
+setInterval(refreshGlobalDisplay, 2000); // Fallback, falls BroadcastChannel fehlt
+
+// Maus-Orbit auf der ganzen Bühne
+const orbitInner = document.getElementById('orbitInner');
+let orbit = { rotX: -16, rotY: 20 }, dragging = false, lx = 0, ly = 0;
+document.getElementById('stage3d').addEventListener('mousedown', e => { dragging = true; lx = e.clientX; ly = e.clientY; });
+window.addEventListener('mouseup', () => dragging = false);
+window.addEventListener('mousemove', e => {
+  if (!dragging) return;
+  orbit.rotY += (e.clientX - lx) * 0.4;
+  orbit.rotX = Math.max(-70, Math.min(70, orbit.rotX - (e.clientY - ly) * 0.4));
+  lx = e.clientX; ly = e.clientY;
+  orbitInner.style.transform = `rotateX(${orbit.rotX}deg) rotateY(${orbit.rotY}deg)`;
+});
+</script>
+</body>
+</html>
