@@ -1,561 +1,1765 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🌀 STAGE · NC‑Commander · Dashboard · Koordinator</title>
-    <style>
-        * { margin:0; padding:0; box-sizing:border-box; }
-        body {
-            background: #05070e;
-            color: #c0d0d0;
-            font-family: 'Segoe UI', 'Consolas', monospace;
-            min-height: 100vh;
-            overflow-x: hidden;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>◈ MOVE · SEIN · MAIN · ATEM · LEBEN · iki1uc</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;}
+  :root{
+    --void:#000104; --bg:#05060e; --bg2:#0a0c18; --bg3:#101428;
+    --gold:#ffcc66; --gold2:#ffe9a0; --orange:#ff8844;
+    --violet:#b388ff; --cyan:#6cf; --green:#8cf0d0;
+    --red:#ff5577; --pink:#ff88b0;
+    --o2:#7ce0a8; --co2:#ffcc44; --h2o:#5fc8ff; --atom:#b388ff;
+    --mana:#ff66c8; --aura:#ffd93d; --zen:#8cf0d0;
+    --move:#ffcc66;      /* MOVE = Gold */
+    --sein:#b388ff;      /* SEIN = Violett */
+    --main:#6cf;         /* MAIN = Cyan */
+    --atem:#8cf0d0;      /* ATEM = Mint */
+    --leben:#ff88b0;     /* LEBEN = Pink */
+    --line:rgba(255,204,102,0.12);
+    --line2:rgba(255,204,102,0.05);
+    --mono:'Consolas','Courier New',monospace;
+    --serif:'Yu Mincho','Hiragino Mincho ProN',serif;
+  }
+  html,body{height:100%;overflow:hidden;}
+  body{
+    background:var(--void);
+    color:#c8d8e8;
+    font-family:var(--mono);
+    font-size:12px;
+  }
 
-        /* ─── MASTER LAYOUT ─────────────────────────────────── */
-        #master {
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-            padding: 16px 20px 20px;
-            max-width: 1400px;
-            margin: 0 auto;
-        }
+  #desk{
+    width:100vw;height:100vh;
+    background:radial-gradient(ellipse at 50% 40%, #0a0618 0%, #030409 70%);
+    display:flex;flex-direction:column;overflow:hidden;position:relative;
+  }
+  #desk::before{
+    content:'';position:absolute;inset:0;
+    background:radial-gradient(ellipse at 50% 45%,
+      rgba(255,204,102,0.04) 0%,
+      rgba(179,136,255,0.02) 40%,
+      transparent 70%);
+    animation:bgBreathe 8s ease-in-out infinite;
+    pointer-events:none;z-index:0;
+  }
+  @keyframes bgBreathe{
+    0%,100%{transform:scale(1);opacity:.5;}
+    50%{transform:scale(1.06);opacity:1;}
+  }
 
-        /* ─── HEADER / COMMANDER ───────────────────────────── */
-        #commander {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-            align-items: center;
-            padding: 12px 20px;
-            background: rgba(6, 8, 16, 0.7);
-            backdrop-filter: blur(10px);
-            border-radius: 16px;
-            border: 1px solid rgba(120, 220, 150, 0.08);
-            margin-bottom: 18px;
-        }
-        #commander .brand {
-            font-size: 22px;
-            font-weight: 300;
-            letter-spacing: 3px;
-            background: linear-gradient(135deg, #7ee0a0, #d8f0c0, #b388ff);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-        #commander .brand small {
-            font-size: 11px;
-            -webkit-text-fill-color: #4a5a6a;
-            letter-spacing: 1px;
-        }
-        .commander-status {
-            display: flex;
-            gap: 18px;
-            font-size: 11px;
-            color: #6a8a7a;
-            flex-wrap: wrap;
-        }
-        .commander-status .led {
-            display: inline-block;
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            margin-right: 4px;
-        }
-        .led.green { background: #8cf0d0; box-shadow: 0 0 8px #8cf0d0; }
-        .led.gold { background: #f0d080; box-shadow: 0 0 8px #f0d080; }
-        .led.purple { background: #b388ff; box-shadow: 0 0 8px #b388ff; }
-        .led.off { background: #2a3a3a; }
+  /* TOPBAR */
+  #topbar{
+    height:34px;
+    background:linear-gradient(180deg,#0a0c18,#04060e);
+    border-bottom:1px solid var(--line);
+    display:flex;align-items:center;padding:0 14px;
+    font-size:11px;letter-spacing:1px;gap:10px;
+    flex-shrink:0;position:relative;z-index:2;
+  }
+  #topbar .logo{
+    color:var(--gold);font-weight:bold;letter-spacing:3px;
+    font-family:var(--serif);display:flex;align-items:center;gap:8px;
+  }
+  #topbar .logo b{color:var(--cyan);}
+  #topbar .breath{
+    display:inline-block;width:10px;height:10px;border-radius:50%;
+    background:var(--atem);box-shadow:0 0 10px var(--atem);
+    animation:breathPulse 4s ease-in-out infinite;
+  }
+  @keyframes breathPulse{
+    0%,100%{transform:scale(.85);box-shadow:0 0 8px var(--atem);}
+    50%{transform:scale(1.3);box-shadow:0 0 20px var(--atem),0 0 40px rgba(140,240,208,.4);}
+  }
+  #topbar .sep{width:1px;height:16px;background:var(--line);}
+  #topbar .stat{
+    color:#7a8a9a;font-size:10px;
+    display:flex;gap:12px;margin-left:auto;align-items:center;flex-wrap:wrap;
+  }
+  #topbar .stat b{font-weight:bold;}
+  #topbar .stat b.gold{color:var(--gold);}
+  #topbar .stat b.vio{color:var(--violet);}
+  #topbar .stat b.cy{color:var(--cyan);}
+  #topbar .stat b.gr{color:var(--green);}
+  #topbar .stat b.pk{color:var(--pink);}
+  #topbar .stat b.rd{color:var(--red);}
+  #topbar #clock{color:var(--cyan);}
 
-        /* ─── 8 RICHTUNGEN (SPINNWEBE) ─────────────────────── */
-        #directions {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 6px;
-            padding: 8px 16px;
-            background: rgba(0, 0, 0, 0.25);
-            border-radius: 12px;
-            border: 1px solid rgba(120, 220, 150, 0.04);
-            margin-bottom: 16px;
-            justify-content: center;
-        }
-        .dir-item {
-            padding: 4px 14px;
-            border-radius: 20px;
-            font-size: 11px;
-            letter-spacing: 1px;
-            color: #5a7a6a;
-            background: rgba(20, 28, 20, 0.3);
-            border: 1px solid rgba(120, 220, 150, 0.04);
-            transition: 0.2s;
-        }
-        .dir-item.active {
-            color: #f0d080;
-            border-color: rgba(240, 208, 128, 0.2);
-            background: rgba(240, 208, 128, 0.04);
-        }
-        .dir-item .sym { color: #7ee0a0; margin-right: 4px; }
+  /* ACHSEN-BAR (MOVE · SEIN · MAIN) */
+  #achseBar{
+    display:grid;grid-template-columns:1fr 1fr 1fr;
+    gap:6px;padding:8px 14px;
+    background:var(--bg2);border-bottom:1px solid var(--line);
+    flex-shrink:0;position:relative;z-index:1;
+  }
+  .achse{
+    background:rgba(6,10,18,0.6);
+    border:1px solid var(--line);border-radius:5px;
+    padding:6px 12px;font-size:10px;
+    display:flex;justify-content:space-between;align-items:center;
+    border-left:3px solid var(--dim2, #2a3644);
+    transition:.3s;
+  }
+  .achse.move{border-left-color:var(--move);}
+  .achse.sein{border-left-color:var(--sein);}
+  .achse.main{border-left-color:var(--main);}
+  .achse .nm{
+    font-family:var(--serif);letter-spacing:2px;font-weight:bold;
+    font-size:12px;
+  }
+  .achse.move .nm{color:var(--move);}
+  .achse.sein .nm{color:var(--sein);}
+  .achse.main .nm{color:var(--main);}
+  .achse .sub{color:#5a6a7a;font-size:9px;letter-spacing:1px;}
+  .achse .val{font-weight:bold;font-size:13px;}
+  .achse.move .val{color:var(--move);}
+  .achse.sein .val{color:var(--sein);}
+  .achse.main .val{color:var(--main);}
 
-        /* ─── 9×9 RESPO HINTERGRUND ────────────────────────── */
-        #respoBg {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            opacity: 0.04;
-            pointer-events: none;
-            display: grid;
-            grid-template-columns: repeat(9, 1fr);
-            grid-template-rows: repeat(9, 1fr);
-            gap: 2px;
-        }
-        #respoBg div {
-            background: rgba(120, 220, 150, 0.03);
-            border-radius: 2px;
-            transition: background 0.5s;
-        }
+  /* MAIN GRID */
+  #main{
+    flex:1;display:grid;
+    grid-template-columns:300px 1fr 300px;
+    overflow:hidden;min-height:0;position:relative;z-index:1;
+  }
+  @media(max-width:1200px){#main{grid-template-columns:1fr 1fr;}}
+  @media(max-width:820px){#main{grid-template-columns:1fr;}}
 
-        /* ─── MODUL‑GRID ────────────────────────────────────── */
-        #grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-            gap: 14px;
-            margin-top: 6px;
-        }
-        .modul-card {
-            background: rgba(10, 14, 22, 0.7);
-            backdrop-filter: blur(4px);
-            border: 1px solid rgba(120, 220, 150, 0.06);
-            border-radius: 16px;
-            padding: 18px 16px 14px;
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(.2,.9,.25,1.05);
-            text-decoration: none;
-            color: #c0d0d0;
-            position: relative;
-            overflow: hidden;
-        }
-        .modul-card:hover {
-            transform: translateY(-4px);
-            border-color: rgba(120, 220, 150, 0.2);
-            box-shadow: 0 12px 40px rgba(0,0,0,0.5);
-            background: rgba(16, 22, 34, 0.8);
-        }
-        .modul-card.plugin {
-            border-color: rgba(179, 136, 255, 0.25);
-            background: rgba(24, 14, 34, 0.7);
-        }
-        .modul-card.plugin:hover { border-color: rgba(179, 136, 255, 0.5); }
-        .modul-card .icon {
-            font-size: 28px;
-            display: block;
-            margin-bottom: 8px;
-        }
-        .modul-card .name {
-            font-size: 15px;
-            font-weight: 600;
-            letter-spacing: 0.5px;
-            color: #d0e8e0;
-        }
-        .modul-card .desc {
-            font-size: 10.5px;
-            color: #6a8a7a;
-            margin-top: 4px;
-        }
-        .modul-card .badge {
-            position: absolute;
-            top: 10px;
-            right: 12px;
-            font-size: 8px;
-            background: rgba(120, 220, 150, 0.06);
-            padding: 2px 10px;
-            border-radius: 10px;
-            color: #4a7a6a;
-            letter-spacing: 0.5px;
-        }
-        .modul-card.plugin .badge {
-            background: rgba(179, 136, 255, 0.1);
-            color: #b388ff;
-        }
-        .modul-card .status-dot {
-            display: inline-block;
-            width: 6px;
-            height: 6px;
-            border-radius: 50%;
-            margin-right: 4px;
-        }
-        .modul-card .status-dot.on { background: #8cf0d0; box-shadow: 0 0 6px #8cf0d0; }
-        .modul-card .status-dot.plugin-on { background: #b388ff; box-shadow: 0 0 6px #b388ff; }
+  .col{display:flex;flex-direction:column;overflow-y:auto;min-height:0;}
+  .col::-webkit-scrollbar{width:6px;}
+  .col::-webkit-scrollbar-thumb{background:var(--line);}
 
-        /* ─── KOMMANDOZEILE ────────────────────────────────── */
-        #cmdLine {
-            margin-top: 18px;
-            display: flex;
-            gap: 10px;
-            align-items: center;
-            padding: 10px 18px;
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 14px;
-            border: 1px solid rgba(120, 220, 150, 0.04);
-            flex-wrap: wrap;
-        }
-        #cmdLine .prompt { color: #5a7a6a; font-size: 11px; }
-        #cmdLine input {
-            flex: 1;
-            min-width: 120px;
-            background: rgba(20, 28, 20, 0.4);
-            border: 1px solid rgba(120, 220, 150, 0.08);
-            border-radius: 8px;
-            padding: 6px 14px;
-            color: #d0e8e0;
-            font-family: inherit;
-            font-size: 11px;
-        }
-        #cmdLine input::placeholder { color: #4a5a5a; }
-        #cmdLine button {
-            background: rgba(20, 28, 20, 0.4);
-            border: 1px solid rgba(120, 220, 150, 0.12);
-            border-radius: 8px;
-            padding: 6px 16px;
-            color: #c0d8c8;
-            font-family: inherit;
-            font-size: 11px;
-            cursor: pointer;
-            transition: 0.2s;
-        }
-        #cmdLine button:hover { border-color: #7ee0a0; color: #fff; }
-        #cmdLine #cmdOut { color: #8cf0d0; font-size: 11px; margin-left: auto; }
+  .panel{
+    background:var(--bg2);border:1px solid var(--line);
+    border-radius:6px;padding:10px 12px;margin:8px 8px 0 8px;
+    position:relative;overflow:hidden;
+  }
+  .panel:last-child{margin-bottom:8px;}
+  .panel h3{
+    font-size:10px;letter-spacing:1.8px;color:var(--gold);
+    text-transform:uppercase;margin-bottom:8px;padding-bottom:5px;
+    border-bottom:1px solid var(--line);
+    display:flex;justify-content:space-between;align-items:center;
+    font-family:var(--serif);font-weight:normal;
+  }
+  .panel h3 .badge{
+    font-size:9px;color:var(--gold);
+    background:rgba(255,204,102,0.08);
+    padding:1px 7px;border-radius:3px;
+    letter-spacing:0.5px;font-family:var(--mono);font-weight:bold;
+    transition:.3s;
+  }
+  .panel h3 .badge.ok{color:var(--green);background:rgba(140,240,208,0.12);}
+  .panel h3 .badge.warn{color:var(--gold);background:rgba(255,204,102,0.12);}
+  .panel h3 .badge.err{color:var(--red);background:rgba(255,85,119,0.12);}
+  .panel h3 .badge.move{color:var(--move);background:rgba(255,204,102,0.12);}
+  .panel h3 .badge.sein{color:var(--sein);background:rgba(179,136,255,0.12);}
+  .panel h3 .badge.main{color:var(--main);background:rgba(108,204,255,0.12);}
+  .panel h3 .badge.atem{color:var(--atem);background:rgba(140,240,208,0.12);}
+  .panel h3 .badge.leben{color:var(--leben);background:rgba(255,136,176,0.12);}
 
-        /* ─── FOOTER ────────────────────────────────────────── */
-        footer {
-            margin-top: 20px;
-            padding: 10px 16px;
-            font-size: 9px;
-            color: #3a4a4a;
-            text-align: center;
-            border-top: 1px solid rgba(120, 220, 150, 0.03);
-        }
-        footer .gold { color: #f0d080; }
+  /* FLASH */
+  .flash{animation:flashPanel .45s ease-out;}
+  @keyframes flashPanel{
+    0%{box-shadow:inset 0 0 0 rgba(255,204,102,0);}
+    50%{box-shadow:inset 0 0 50px rgba(255,204,102,0.3);}
+    100%{box-shadow:inset 0 0 0 rgba(255,204,102,0);}
+  }
 
-        /* ─── RESPONSIVE ────────────────────────────────────── */
-        @media (max-width: 700px) {
-            #grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; }
-            #commander .brand { font-size: 17px; }
-            .modul-card { padding: 14px 12px 10px; }
-            .modul-card .icon { font-size: 22px; }
-            .modul-card .name { font-size: 13px; }
-            #cmdLine { flex-direction: column; align-items: stretch; }
-            #cmdLine #cmdOut { margin-left: 0; }
-        }
-    </style>
+  /* MOVE-BAR */
+  .move-row{
+    display:grid;grid-template-columns:70px 1fr 45px;
+    gap:8px;align-items:center;padding:4px 0;
+    border-bottom:1px dashed var(--line2);font-size:10.5px;
+  }
+  .move-row:last-child{border-bottom:none;}
+  .move-row .k{color:#8aa8a0;font-size:9.5px;letter-spacing:1px;font-weight:bold;}
+  .move-row .bar{
+    height:6px;background:var(--bg3);border-radius:2px;overflow:hidden;
+  }
+  .move-row .bar .f{
+    height:100%;transition:width .35s cubic-bezier(.2,.9,.25,1);
+  }
+  .move-row .bar .f.mv-rot{background:linear-gradient(90deg,#5a3a1a,var(--orange));}
+  .move-row .bar .f.mv-orb{background:linear-gradient(90deg,#3a2a5a,var(--violet));}
+  .move-row .bar .f.mv-wav{background:linear-gradient(90deg,#1a3a4a,var(--cyan));}
+  .move-row .bar .f.mv-lin{background:linear-gradient(90deg,#3a2a0a,var(--gold));}
+  .move-row .bar .f.mv-spr{background:linear-gradient(90deg,#3a1a1a,var(--red));}
+  .move-row .v{text-align:right;font-weight:bold;color:var(--gold);}
+
+  /* SEIN-LISTE */
+  .sein-row{
+    display:grid;grid-template-columns:110px 1fr 55px;
+    gap:8px;align-items:center;padding:5px 6px;
+    background:rgba(0,0,0,0.25);border-radius:4px;
+    margin-bottom:4px;font-size:10px;
+    border-left:2px solid var(--sein);
+    transition:.25s;
+  }
+  .sein-row .ic{font-size:12px;}
+  .sein-row .nm{color:#c8d8e8;font-weight:bold;letter-spacing:0.5px;}
+  .sein-row .nm small{color:#5a6a7a;font-weight:normal;font-size:8px;display:block;}
+  .sein-row .v{text-align:right;font-weight:bold;color:var(--sein);font-size:11px;}
+  .sein-row.active{background:rgba(179,136,255,0.08);}
+
+  /* MAIN-LOOP */
+  .main-row{
+    display:grid;grid-template-columns:70px 1fr 60px;
+    gap:8px;align-items:center;padding:5px 0;
+    border-bottom:1px dashed var(--line2);font-size:10.5px;
+  }
+  .main-row:last-child{border-bottom:none;}
+  .main-row .k{color:#8aa8a0;font-size:9.5px;letter-spacing:1px;font-weight:bold;}
+  .main-row .v{text-align:right;font-weight:bold;color:var(--main);}
+  .main-row .bar{
+    height:5px;background:var(--bg3);border-radius:2px;overflow:hidden;
+  }
+  .main-row .bar .f{
+    height:100%;transition:width .35s;
+    background:linear-gradient(90deg,#1a3a5a,var(--main));
+  }
+
+  /* ATEM CORE */
+  #atemPanel{
+    display:flex;justify-content:center;align-items:center;
+    padding:20px 12px;min-height:320px;
+  }
+  #atemWrap{position:relative;width:280px;height:280px;}
+  #atemWrap svg{position:absolute;inset:0;}
+  #atemCore{
+    position:absolute;top:50%;left:50%;
+    transform:translate(-50%,-50%);
+    width:110px;height:110px;border-radius:50%;
+    background:radial-gradient(circle at 40% 35%,
+      #ffffff 0%,#b8ffd8 12%,#7ce0a8 35%,#5fc8ff 65%,#1a0838 100%);
+    box-shadow:
+      0 0 40px rgba(140,240,208,0.7),
+      0 0 90px rgba(108,204,255,0.5),
+      inset 0 0 30px rgba(255,255,255,0.35);
+    display:flex;align-items:center;justify-content:center;
+    font-family:var(--serif);font-size:36px;color:#0a2a20;
+    font-weight:bold;text-shadow:0 0 14px rgba(255,255,255,0.7);
+    transition:transform .15s;z-index:3;
+  }
+  #atemCore.tick{animation:atemTick .35s;}
+  @keyframes atemTick{
+    0%{transform:translate(-50%,-50%) scale(1);}
+    50%{transform:translate(-50%,-50%) scale(1.22);}
+    100%{transform:translate(-50%,-50%) scale(1);}
+  }
+  #atemGlyph{
+    position:absolute;top:50%;left:50%;
+    transform:translate(-50%,-50%);
+    font-size:30px;font-weight:bold;color:#fff;
+    text-shadow:0 0 16px rgba(255,255,255,0.9),0 0 32px rgba(140,240,208,0.8);
+    z-index:4;font-family:var(--mono);
+  }
+  #atemLabel{
+    position:absolute;top:50%;left:50%;
+    transform:translate(-50%,-50%);
+    font-size:10px;color:#fff;font-weight:bold;
+    text-shadow:0 0 8px rgba(0,0,0,0.8);
+    z-index:5;font-family:var(--serif);
+    letter-spacing:3px;margin-top:44px;text-align:center;width:180px;
+  }
+
+  /* MOVE-CANVAS */
+  #moveCanvas{
+    width:100%;aspect-ratio:1;
+    background:#02040a;
+    border:1px solid var(--line);
+    border-radius:6px;display:block;
+    max-height:280px;
+  }
+
+  /* DREHBUCH-SZENE */
+  #scene{
+    background:#02040a;
+    border:1px solid var(--line);
+    border-left:3px solid var(--move);
+    border-radius:5px;
+    padding:10px 14px;
+    font-family:var(--serif);
+    font-size:11.5px;
+    line-height:1.7;
+    color:#c8d8e8;
+    max-height:280px;overflow-y:auto;
+  }
+  #scene::-webkit-scrollbar{width:5px;}
+  #scene::-webkit-scrollbar-thumb{background:var(--line);}
+  #scene .ttl{
+    color:var(--gold);font-size:13px;letter-spacing:2px;
+    font-weight:bold;margin-bottom:6px;
+    border-bottom:1px dashed var(--line2);padding-bottom:4px;
+  }
+  #scene .meta{
+    color:#7a8a9a;font-size:10px;font-family:var(--mono);
+    margin-bottom:8px;letter-spacing:1px;
+  }
+  #scene .blk{
+    padding:6px 10px;margin:6px 0;border-radius:4px;
+    background:rgba(20,28,40,0.5);
+    border-left:3px solid var(--cyan);
+  }
+  #scene .blk.regie{border-left-color:var(--gold);}
+  #scene .blk.camera{border-left-color:var(--violet);}
+  #scene .blk.sfx{border-left-color:var(--green);}
+  #scene .blk.dialog{border-left-color:var(--pink);font-style:italic;color:#e8d8f0;}
+  #scene .blk .lbl{
+    font-family:var(--mono);font-size:9px;letter-spacing:2px;
+    color:#5a6a7a;display:block;margin-bottom:3px;
+  }
+  #scene .blk.dialog .lbl{color:var(--pink);}
+  #scene .blk.regie .lbl{color:var(--gold);}
+  #scene .blk.camera .lbl{color:var(--violet);}
+  #scene .blk.sfx .lbl{color:var(--green);}
+
+  /* VERIFY-GRID */
+  #verifyGrid{
+    display:grid;grid-template-columns:repeat(4,1fr);gap:3px;
+  }
+  .vcell{
+    background:var(--bg3);border:1px solid var(--line);
+    border-radius:3px;padding:5px 2px;text-align:center;
+    font-size:7.5px;cursor:pointer;transition:.25s;
+    min-height:46px;display:flex;flex-direction:column;
+    justify-content:center;align-items:center;user-select:none;
+  }
+  .vcell:hover{transform:scale(1.05);}
+  .vcell .ic{font-size:11px;margin-bottom:1px;font-weight:bold;}
+  .vcell .nm{font-size:6.5px;color:#5a6a7a;letter-spacing:0.3px;}
+  .vcell .dbl{font-size:6.5px;color:#3a4a5a;margin-top:1px;letter-spacing:1px;}
+  .vcell.pass{background:rgba(140,240,208,0.12);border-color:var(--green);color:var(--green);}
+  .vcell.pass .ic{color:var(--green);text-shadow:0 0 6px var(--green);}
+  .vcell.pass .nm{color:var(--green);}
+  .vcell.warn{background:rgba(255,204,102,0.1);border-color:var(--gold);color:var(--gold);}
+  .vcell.warn .ic{color:var(--gold);}
+  .vcell.fail{background:rgba(255,85,119,0.12);border-color:var(--red);color:var(--red);}
+  .vcell.fail .ic{color:var(--red);}
+  .vcell.checking{animation:vcellCheck .6s;}
+  @keyframes vcellCheck{
+    0%,100%{box-shadow:0 0 0 rgba(108,204,255,0);}
+    50%{box-shadow:0 0 16px rgba(108,204,255,0.8);transform:scale(1.1);}
+  }
+
+  /* Klick/ZacK */
+  .klick-big{
+    display:flex;justify-content:space-between;
+    align-items:center;padding:6px 10px;
+    background:rgba(0,0,0,0.35);border-radius:5px;
+    border-left:3px solid var(--gold);margin-bottom:5px;
+  }
+  .klick-big .lbl{color:#8aa8a0;font-size:10px;letter-spacing:1.5px;}
+  .klick-big .val{
+    font-size:22px;font-weight:bold;color:var(--gold);
+    font-family:var(--serif);letter-spacing:2px;
+    text-shadow:0 0 10px rgba(255,204,102,0.5);
+  }
+
+  /* BUTTONS */
+  .mbtn{
+    background:var(--bg3);color:#c8d8e8;
+    border:1px solid var(--line);
+    padding:6px 10px;border-radius:3px;
+    font-family:inherit;font-size:9.5px;
+    letter-spacing:1px;cursor:pointer;transition:.15s;
+    text-transform:uppercase;flex:1;min-width:60px;user-select:none;
+  }
+  .mbtn:hover{border-color:var(--gold);background:rgba(255,204,102,0.12);color:var(--gold);}
+  .mbtn:active{transform:scale(0.94);}
+  .mbtn.gold{border-color:rgba(255,204,102,0.4);color:var(--gold);}
+  .mbtn.gold:hover{background:rgba(255,204,102,0.2);border-color:var(--gold);color:#fff;box-shadow:0 0 12px rgba(255,204,102,0.4);}
+  .mbtn.vio{border-color:rgba(179,136,255,0.4);color:var(--violet);}
+  .mbtn.vio:hover{background:rgba(179,136,255,0.15);border-color:var(--violet);color:#fff;box-shadow:0 0 12px rgba(179,136,255,0.4);}
+  .mbtn.cy{border-color:rgba(108,204,255,0.4);color:var(--cyan);}
+  .mbtn.cy:hover{background:rgba(108,204,255,0.15);border-color:var(--cyan);color:#fff;}
+  .mbtn.gr{border-color:rgba(140,240,208,0.4);color:var(--green);}
+  .mbtn.gr:hover{background:rgba(140,240,208,0.15);border-color:var(--green);color:#fff;}
+  .mbtn.pk{border-color:rgba(255,136,176,0.4);color:var(--pink);}
+  .mbtn.pk:hover{background:rgba(255,136,176,0.15);border-color:var(--pink);color:#fff;}
+  .mbtn.rd{border-color:rgba(255,85,119,0.4);color:var(--red);}
+  .mbtn.rd:hover{background:rgba(255,85,119,0.15);border-color:var(--red);color:#fff;}
+
+  /* LOG */
+  #cli{
+    height:130px;background:#02040a;
+    border-top:1px solid var(--line);
+    display:flex;flex-direction:column;flex-shrink:0;
+    position:relative;z-index:2;
+  }
+  #cliHdr{
+    height:22px;background:var(--bg2);
+    border-bottom:1px solid var(--line);
+    display:flex;align-items:center;
+    padding:0 12px;font-size:9px;
+    letter-spacing:1.5px;color:#5a6a7a;
+    text-transform:uppercase;gap:12px;
+    font-family:var(--serif);
+  }
+  #cliHdr .tab{color:var(--gold);cursor:pointer;letter-spacing:1.5px;user-select:none;}
+  #cliHdr .tab:hover{color:#fff;}
+  #cliHdr .tab.active{color:var(--cyan);border-bottom:1px solid var(--cyan);padding-bottom:1px;}
+  #cliHdr .tag{
+    margin-left:auto;color:var(--green);font-size:9px;
+    letter-spacing:1px;display:flex;align-items:center;gap:5px;
+  }
+  #cliHdr .tag .led{
+    width:6px;height:6px;border-radius:50%;
+    background:var(--green);box-shadow:0 0 6px var(--green);
+    animation:breathPulse 4s ease-in-out infinite;
+  }
+  #log{
+    flex:1;padding:6px 12px;overflow-y:auto;
+    font-size:10px;line-height:1.5;color:#6a7a8a;
+    font-family:var(--mono);
+  }
+  #log::-webkit-scrollbar{width:5px;}
+  #log::-webkit-scrollbar-thumb{background:var(--line);}
+  #log .ln{white-space:pre-wrap;word-break:break-all;animation:logIn .3s ease-out;}
+  @keyframes logIn{from{opacity:0;transform:translateX(-4px);}to{opacity:1;transform:none;}}
+  #log .ts{color:#3a4a5a;margin-right:6px;}
+  #log .ok{color:var(--green);}
+  #log .warn{color:var(--gold);}
+  #log .err{color:var(--red);}
+  #log .info{color:var(--cyan);}
+  #log .move{color:var(--move);}
+  #log .sein{color:var(--sein);}
+  #log .main{color:var(--main);}
+  #log .atem{color:var(--atem);}
+  #log .leben{color:var(--leben);}
+
+  #cliInput{
+    height:24px;background:var(--bg3);
+    border-top:1px solid var(--line);
+    display:flex;align-items:center;
+    padding:0 12px;font-size:11px;flex-shrink:0;
+  }
+  #cliInput .prompt{color:var(--gold);margin-right:6px;font-weight:bold;}
+  #cliInput input{
+    flex:1;background:transparent;border:none;
+    color:#c8d8e8;font-family:var(--mono);
+    font-size:11px;outline:none;
+  }
+  #cliInput input::placeholder{color:#3a4a5a;}
+
+  /* BOOT */
+  #boot{
+    position:fixed;inset:0;background:#000;
+    display:flex;flex-direction:column;
+    align-items:center;justify-content:center;
+    gap:14px;z-index:9999;font-size:12px;
+    color:var(--gold);letter-spacing:2px;
+    transition:opacity .7s;
+  }
+  #boot.done{opacity:0;pointer-events:none;}
+  #boot .logo{
+    font-size:44px;color:var(--gold);letter-spacing:10px;
+    font-weight:bold;
+    text-shadow:0 0 30px rgba(255,204,102,0.7),0 0 60px rgba(179,136,255,0.5);
+    animation:logoBreathe 4s ease-in-out infinite;
+    font-family:var(--serif);
+  }
+  @keyframes logoBreathe{
+    0%,100%{transform:scale(1);filter:brightness(1);}
+    50%{transform:scale(1.04);filter:brightness(1.35);}
+  }
+  #boot .sub{color:var(--cyan);font-size:11px;letter-spacing:8px;font-family:var(--serif);}
+  #boot .lines{
+    width:560px;max-width:82%;font-size:11px;line-height:1.7;
+    text-align:left;color:var(--green);letter-spacing:0.5px;
+    font-family:var(--mono);
+  }
+  #boot .lines b{color:var(--gold);}
+  #boot .lines .dim{color:#3a4a5a;}
+  #boot .lines .atom{color:var(--atom);}
+  #boot .lines .cy{color:var(--cyan);}
+  #boot .progress{
+    width:560px;max-width:82%;height:3px;
+    background:var(--bg3);border-radius:2px;overflow:hidden;
+  }
+  #boot .progress .bar{
+    height:100%;width:0;
+    background:linear-gradient(90deg,var(--gold),var(--cyan),var(--green));
+    transition:width .3s;
+  }
+
+  /* FL76 */
+  #fl76{
+    position:fixed;bottom:10px;right:10px;
+    padding:4px 10px;background:rgba(4,5,14,0.95);
+    border:1px solid rgba(140,240,208,0.3);
+    border-radius:5px;font-size:9px;
+    letter-spacing:1px;color:var(--green);
+    z-index:12;text-align:right;min-width:100px;
+  }
+  #fl76 .num{font-size:13px;font-weight:bold;}
+
+  @media(max-width:700px){
+    #topbar{padding:0 8px;height:auto;flex-wrap:wrap;padding:5px 8px;}
+    .panel{padding:8px 10px;margin:6px 6px 0 6px;}
+    #atemWrap{width:220px;height:220px;}
+    #atemCore{width:90px;height:90px;font-size:28px;}
+    #atemGlyph{font-size:24px;}
+    #atemLabel{font-size:9px;margin-top:36px;}
+  }
+</style>
 </head>
 <body>
 
-<!-- 9×9 RESPO HINTERGRUND -->
-<div id="respoBg"></div>
+<!-- BOOT -->
+<div id="boot">
+  <div class="logo">◈ MOVE · SEIN · MAIN</div>
+  <div class="sub">ATEM · LEBEN · iki1uc</div>
+  <div class="lines" id="bootLines"></div>
+  <div class="progress"><div class="bar" id="bootBar"></div></div>
+</div>
 
-<div id="master">
+<!-- DESK -->
+<div id="desk">
 
-    <!-- COMMANDER HEADER -->
-    <header id="commander">
-        <div class="brand">
-            🌀 STAGE
-            <small>NC‑Commander · Koordinator</small>
+  <!-- TOPBAR -->
+  <div id="topbar">
+    <span class="logo">
+      <span class="breath"></span>
+      MOVE·SEIN·MAIN<b>::iki1uc</b>
+    </span>
+    <span class="sep"></span>
+    <span style="color:#5a6a7a;">/root/runtime &gt; index.html</span>
+    <div class="stat">
+      <span>MOVE <b class="gold" id="tMove">0</b></span>
+      <span>SEIN <b class="vio" id="tSein">—</b></span>
+      <span>MAIN <b class="cy" id="tMain">0</b></span>
+      <span>ATEM <b class="gr" id="tAtem">0</b></span>
+      <span>LEBEN <b class="pk" id="tLeben">100%</b></span>
+      <span>VERIFY <b class="gr" id="tVerify">0/16</b></span>
+      <span>DJINN <b class="vio" id="tDjinn">—</b></span>
+      <span id="clock">--:--:--</span>
+    </div>
+  </div>
+
+  <!-- ACHSEN -->
+  <div id="achseBar">
+    <div class="achse move">
+      <div>
+        <span class="nm">MOVE</span>
+        <span class="sub"> · echte bewegung</span>
+      </div>
+      <span class="val" id="aMove">0</span>
+    </div>
+    <div class="achse sein">
+      <div>
+        <span class="nm">SEIN</span>
+        <span class="sub"> · zustand · ist</span>
+      </div>
+      <span class="val" id="aSein">RUHE</span>
+    </div>
+    <div class="achse main">
+      <div>
+        <span class="nm">MAIN</span>
+        <span class="sub"> · loop · kern</span>
+      </div>
+      <span class="val" id="aMain">0</span>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <div id="main">
+
+    <!-- LEFT COL -->
+    <div class="col">
+
+      <!-- MOVE-PANEL -->
+      <div class="panel" id="movePanel">
+        <h3>◈ MOVE · BEWEGUNG <span class="badge move" id="moveBadge">aktiv</span></h3>
+        <div id="moveRows"></div>
+        <div style="display:flex;gap:4px;margin-top:8px;flex-wrap:wrap;">
+          <button class="mbtn gold" id="btnMoveRot">↻ rot</button>
+          <button class="mbtn vio" id="btnMoveOrb">◉ orb</button>
+          <button class="mbtn cy" id="btnMoveWav">≈ wav</button>
+          <button class="mbtn gr" id="btnMoveAll">▶ alle</button>
         </div>
-        <div class="commander-status">
-            <span><span class="led green"></span> NC‑LIVE</span>
-            <span><span class="led gold"></span> ROUTING</span>
-            <span><span class="led purple"></span> KOOP</span>
-            <span id="clockDisplay" style="color:#5a7a6a;">–</span>
-            <span id="globalStandDisplay" style="color:#b388ff;">🌐 Stand: –</span>
+      </div>
+
+      <!-- SEIN-PANEL -->
+      <div class="panel" id="seinPanel">
+        <h3>◈ SEIN · ZUSTAND <span class="badge sein" id="seinBadge">ist</span></h3>
+        <div id="seinRows"></div>
+      </div>
+
+      <!-- MAIN-PANEL -->
+      <div class="panel" id="mainPanel">
+        <h3>◈ MAIN · LOOP-KERN <span class="badge main" id="mainBadge">läuft</span></h3>
+        <div id="mainRows"></div>
+        <div style="display:flex;gap:4px;margin-top:8px;flex-wrap:wrap;">
+          <button class="mbtn cy" id="btnMainTick">⏭ tick</button>
+          <button class="mbtn gr" id="btnMainBurst">⚡ burst</button>
+          <button class="mbtn gold" id="btnMainCycle">↻ cycle</button>
         </div>
-    </header>
+      </div>
 
-    <!-- 8 RICHTUNGEN (SPINNWEBE) -->
-    <div id="directions">
-        <span class="dir-item active"><span class="sym">●</span> S · Sonne</span>
-        <span class="dir-item"><span class="sym">○</span> H · Engine</span>
-        <span class="dir-item"><span class="sym">◆</span> B · Matrix</span>
-        <span class="dir-item"><span class="sym">△</span> T · Triangle</span>
-        <span class="dir-item"><span class="sym">◉</span> O · Orbit</span>
-        <span class="dir-item"><span class="sym">▣</span> D · DS9</span>
-        <span class="dir-item"><span class="sym">⚙</span> t · Helper</span>
-        <span class="dir-item"><span class="sym">🧠</span> sys · System</span>
+      <!-- VERIFY -->
+      <div class="panel" id="verifyPanel">
+        <h3>◈ 16fach VERIFY <span class="badge ok" id="verifyBadge">16/16</span></h3>
+        <div id="verifyGrid"></div>
+        <div style="display:flex;gap:4px;margin-top:8px;flex-wrap:wrap;">
+          <button class="mbtn gr" id="btnVerifyAll">⟳ verify-all</button>
+          <button class="mbtn vio" id="btnVerifyDeep">◈ deep</button>
+        </div>
+      </div>
+
     </div>
 
-    <!-- MODUL-GRID -->
-    <div id="grid">
+    <!-- CENTER COL -->
+    <div class="col">
 
-        <!-- NEU: BRAIN als Plugin-Kachel, optisch abgesetzt (violett) -->
-        <a class="modul-card plugin" href="./BRAIN/index.html">
-            <span class="badge">PLUGIN</span>
-            <span class="icon">🧠</span>
-            <div class="name">BRAIN</div>
-            <div class="desc">ROOT · NC‑Suite · Respo‑Mesh · Dreieck‑Screens</div>
-            <span style="font-size:9px;color:#4a6a5a;"><span class="status-dot plugin-on"></span> Plugin aktiv</span>
-        </a>
+      <!-- ATEM-KERN -->
+      <div class="panel" id="atemPanel">
+        <div id="atemWrap">
+          <svg viewBox="-150 -150 300 300">
+            <circle id="r1" cx="0" cy="0" r="130" fill="none" stroke="rgba(140,240,208,0.10)" stroke-width="1"/>
+            <circle id="r2" cx="0" cy="0" r="105" fill="none" stroke="rgba(108,204,255,0.10)" stroke-width="0.8" stroke-dasharray="4 8"/>
+            <circle id="r3" cx="0" cy="0" r="80" fill="none" stroke="rgba(255,204,102,0.08)" stroke-width="0.7" stroke-dasharray="3 6"/>
+            <circle id="r4" cx="0" cy="0" r="55" fill="none" stroke="rgba(179,136,255,0.10)" stroke-width="0.6" stroke-dasharray="2 4"/>
+            <line x1="-130" y1="0" x2="130" y2="0" stroke="rgba(140,240,208,0.05)" stroke-width="0.5"/>
+            <line x1="0" y1="-130" x2="0" y2="130" stroke="rgba(140,240,208,0.05)" stroke-width="0.5"/>
+            <g id="atemOrbs"></g>
+          </svg>
+          <div id="atemCore">◈</div>
+          <div id="atemGlyph">0</div>
+          <div id="atemLabel">ATEM · LEBT</div>
+        </div>
+      </div>
 
-        <!-- Module aus dem Repository -->
-        <a class="modul-card" href="./BOERSE/index.html">
-            <span class="badge">STAGE</span>
-            <span class="icon">📈</span>
-            <div class="name">BOERSE</div>
-            <div class="desc">Börsen‑Daten · Stage</div>
-            <span style="font-size:9px;color:#4a6a5a;"><span class="status-dot on"></span> aktiv</span>
-        </a>
+      <!-- MOVE-CANVAS -->
+      <div class="panel">
+        <h3>◈ MOVE · BEWEGUNG · LIVE <span class="badge move" id="canvasBadge">läuft</span></h3>
+        <canvas id="moveCanvas"></canvas>
+        <div style="font-size:9px;color:#5a6a7a;text-align:center;margin-top:6px;letter-spacing:1px;">
+          echte bewegung · echte wirkung · was sich bewegt, ist
+        </div>
+      </div>
 
-        <a class="modul-card" href="./DOM/index.html">
-            <span class="badge">STAGE</span>
-            <span class="icon">🏛</span>
-            <div class="name">DOM</div>
-            <div class="desc">Dom‑Struktur · NC‑Raum</div>
-            <span style="font-size:9px;color:#4a6a5a;"><span class="status-dot on"></span> aktiv</span>
-        </a>
+      <!-- DREHBUCH-SZENE -->
+      <div class="panel" id="scenePanel">
+        <h3>◈ DREHBUCH · SC1 <span class="badge" id="sceneBadge">begegnung</span></h3>
+        <div id="scene">
+          <div class="ttl">SC1 · Begegnung mit der Zukunft</div>
+          <div class="meta">Ort: Offener Stadtplatz · Zeit: später Nachmittag · Atmosphäre: ruhig</div>
 
-        <a class="modul-card" href="./EOS/index.html">
-            <span class="badge">STAGE</span>
-            <span class="icon">🌌</span>
-            <div class="name">EOS</div>
-            <div class="desc">Ende‑of‑System · Orbit</div>
-            <span style="font-size:9px;color:#4a6a5a;"><span class="status-dot on"></span> aktiv</span>
-        </a>
+          <div class="blk camera">
+            <span class="lbl">KAMERA</span>
+            Totale im Hochformat · Langsame Vorwärtsfahrt · Figuren etablieren
+          </div>
 
-        <a class="modul-card" href="./EVO/index.html">
-            <span class="badge">STAGE</span>
-            <span class="icon">🔮</span>
-            <div class="name">EVO</div>
-            <div class="desc">Evolution · Axiom‑Map</div>
-            <span style="font-size:9px;color:#4a6a5a;"><span class="status-dot on"></span> aktiv</span>
-        </a>
+          <div class="blk regie">
+            <span class="lbl">REGIE</span>
+            Keine Dialoge. Beide Figuren werden eingeführt — Erzähler links, Fan rechts.
+          </div>
 
-        <a class="modul-card" href="./MARKT/index.html">
-            <span class="badge">STAGE</span>
-            <span class="icon">🏪</span>
-            <div class="name">MARKT</div>
-            <div class="desc">Markt‑Platz · RESPO</div>
-            <span style="font-size:9px;color:#4a6a5a;"><span class="status-dot on"></span> aktiv</span>
-        </a>
+          <div class="blk sfx">
+            <span class="lbl">SFX</span>
+            Leichter Wind · entfernte Stadtgeräusche · Schritte auf Pflaster
+          </div>
 
-        <a class="modul-card" href="./respo/index.html">
-            <span class="badge">STAGE</span>
-            <span class="icon">🌀</span>
-            <div class="name">RESPO</div>
-            <div class="desc">9×9‑Mesh · Live‑Daten</div>
-            <span style="font-size:9px;color:#4a6a5a;"><span class="status-dot on"></span> aktiv</span>
-        </a>
+          <div class="blk dialog">
+            <span class="lbl">ERZÄHLER</span>
+            „Schau dir das an. Das hier ist mein persönlicher Communicator. Er ist kleiner als eurer, braucht keinen Klappmechanismus und funktioniert überall auf der Welt.“
+          </div>
 
-        <a class="modul-card" href="./tool48/index.html">
-            <span class="badge">STAGE</span>
-            <span class="icon">🛠</span>
-            <div class="name">TOOL48</div>
-            <div class="desc">48‑Tools · Werkzeugkasten</div>
-            <span style="font-size:9px;color:#4a6a5a;"><span class="status-dot on"></span> aktiv</span>
-        </a>
+          <div class="blk">
+            <span class="lbl">FIGUR</span>
+            Der Fan senkt sein Notizbuch und starrt sprachlos auf das Gerät.
+          </div>
+        </div>
+      </div>
 
-        <a class="modul-card" href="./funktion/index.html">
-            <span class="badge">STAGE</span>
-            <span class="icon">⚙️</span>
-            <div class="name">FUNKTION</div>
-            <div class="desc">Funktions‑Achse · VEC</div>
-            <span style="font-size:9px;color:#4a6a5a;"><span class="status-dot on"></span> aktiv</span>
-        </a>
-
-        <a class="modul-card" href="./etage-8-orbit-viewer/index.html">
-            <span class="badge">VIEWER</span>
-            <span class="icon">👁</span>
-            <div class="name">ORBIT‑VIEWER</div>
-            <div class="desc">8‑Etagen‑Orbit · 3D</div>
-            <span style="font-size:9px;color:#4a6a5a;"><span class="status-dot on"></span> aktiv</span>
-        </a>
-
-        <!-- Weitere Ordner aus der Liste (b, h, t) -->
-        <a class="modul-card" href="./b/index.html">
-            <span class="badge">STAGE</span>
-            <span class="icon">📐</span>
-            <div class="name">Breite (b)</div>
-            <div class="desc">Breiten‑Achse · HDF</div>
-            <span style="font-size:9px;color:#4a6a5a;"><span class="status-dot on"></span> aktiv</span>
-        </a>
-
-        <a class="modul-card" href="./h/index.html">
-            <span class="badge">STAGE</span>
-            <span class="icon">↗</span>
-            <div class="name">Hoch (h)</div>
-            <div class="desc">Hoch‑Achse · Vektor</div>
-            <span style="font-size:9px;color:#4a6a5a;"><span class="status-dot on"></span> aktiv</span>
-        </a>
-
-        <a class="modul-card" href="./t/index.html">
-            <span class="badge">STAGE</span>
-            <span class="icon">↕</span>
-            <div class="name">Tiefe (t)</div>
-            <div class="desc">Tiefen‑Achse · NC</div>
-            <span style="font-size:9px;color:#4a6a5a;"><span class="status-dot on"></span> aktiv</span>
-        </a>
     </div>
 
-    <!-- KOMMANDOZEILE (HDF-Resolver / NC-Router) -->
-    <div id="cmdLine">
-        <span class="prompt">⚡ NC‑ROUTER</span>
-        <input id="cmdInput" placeholder="Modul oder Befehl… z.B. BRAIN, BOERSE, DOM, EVO">
-        <button id="cmdBtn">▶ NAVIGIEREN</button>
-        <span id="cmdOut">🧭 Warte auf Befehl</span>
+    <!-- RIGHT COL -->
+    <div class="col">
+
+      <!-- KLICK / ZACK -->
+      <div class="panel" id="klickPanel">
+        <h3>◈ KLICK · ZACK <span class="badge gold" id="klickBadge">läuft</span></h3>
+        <div class="klick-big">
+          <span class="lbl">Klick</span>
+          <span class="val" id="mKlick">0</span>
+        </div>
+        <div class="klick-big" style="border-left-color:var(--violet);">
+          <span class="lbl">Zack</span>
+          <span class="val" id="mZack" style="color:var(--violet);">0</span>
+        </div>
+        <div style="display:flex;gap:4px;margin-top:8px;flex-wrap:wrap;">
+          <button class="mbtn gold" id="btnKlick">◉ +1 klick</button>
+          <button class="mbtn vio" id="btnZack">⚡ +1 zack</button>
+          <button class="mbtn rd" id="btnKlickReset">⟲ reset</button>
+        </div>
+      </div>
+
+      <!-- ATEM · MANA/AURA/ZEN -->
+      <div class="panel" id="mazPanel">
+        <h3>◈ ATEM · MANA/AURA/ZEN <span class="badge atem" id="mazBadge">atmet</span></h3>
+        <div id="mazRows"></div>
+        <div style="display:flex;gap:4px;margin-top:8px;flex-wrap:wrap;">
+          <button class="mbtn gr" id="btnMazBoost">⚡ boost</button>
+          <button class="mbtn pk" id="btnMazMax">★ max</button>
+          <button class="mbtn vio" id="btnMazReset">⟲ reset</button>
+        </div>
+      </div>
+
+      <!-- LEBEN -->
+      <div class="panel" id="lebenPanel">
+        <h3>◈ LEBEN · NACHGEBILDET <span class="badge leben" id="lebenBadge">100%</span></h3>
+        <div id="lebenRows"></div>
+        <div style="display:flex;gap:4px;margin-top:8px;flex-wrap:wrap;">
+          <button class="mbtn pk" id="btnLebenBoost">⚡ leben +10%</button>
+          <button class="mbtn gr" id="btnLebenHeal">★ heilen</button>
+          <button class="mbtn gold" id="btnLebenReset">⟲ reset</button>
+        </div>
+      </div>
+
+      <!-- DJINN -->
+      <div class="panel" id="djinnPanel">
+        <h3>◈ DJINN <span class="badge vio" id="djinnBadge">—</span></h3>
+        <div style="text-align:center;padding:10px 0;">
+          <div style="font-family:var(--serif);font-size:38px;color:var(--violet);
+                      text-shadow:0 0 20px rgba(179,136,255,0.8);
+                      transition:.5s;" id="djinnGlyph">幻</div>
+          <div style="font-size:9px;color:#5a6a7a;letter-spacing:2px;margin-top:6px;">
+            überall und nirgends
+          </div>
+        </div>
+        <div style="display:flex;gap:4px;flex-wrap:wrap;">
+          <button class="mbtn vio" id="btnDjinnToggle">🧞 toggle</button>
+          <button class="mbtn gold" id="btnDjinnSummon">✦ summon</button>
+        </div>
+      </div>
+
+      <!-- RESULT -->
+      <div class="panel" id="resultPanel">
+        <h3>◈ RESULT <span class="badge ok" id="resultBadge">stabil</span></h3>
+        <div id="resultBox" style="font-size:10px;line-height:1.7;font-family:var(--mono);">
+          <div style="display:flex;justify-content:space-between;padding:2px 0;border-bottom:1px dashed rgba(255,204,102,0.1);">
+            <span style="color:#5a6a7a;">move</span><span style="color:var(--move);font-weight:bold;" id="rMove">0</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;padding:2px 0;border-bottom:1px dashed rgba(255,204,102,0.1);">
+            <span style="color:#5a6a7a;">sein</span><span style="color:var(--sein);font-weight:bold;" id="rSein">RUHE</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;padding:2px 0;border-bottom:1px dashed rgba(255,204,102,0.1);">
+            <span style="color:#5a6a7a;">main</span><span style="color:var(--main);font-weight:bold;" id="rMain">0</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;padding:2px 0;border-bottom:1px dashed rgba(255,204,102,0.1);">
+            <span style="color:#5a6a7a;">atem</span><span style="color:var(--atem);font-weight:bold;" id="rAtem">0</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;padding:2px 0;border-bottom:1px dashed rgba(255,204,102,0.1);">
+            <span style="color:#5a6a7a;">leben</span><span style="color:var(--leben);font-weight:bold;" id="rLeben">100%</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;padding:4px 0 0;margin-top:4px;border-top:1px solid rgba(255,204,102,0.15);">
+            <span style="color:#5a6a7a;">⟹</span>
+            <span style="color:var(--gold);font-weight:bold;font-size:12px;" id="rTotal">◈ LÄUFT</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- MASTER-ACTIONS -->
+      <div class="panel" id="masterPanel">
+        <h3>◈ MASTER · AKTION <span class="badge gold">live</span></h3>
+        <div style="display:flex;gap:4px;flex-wrap:wrap;">
+          <button class="mbtn gold" id="btnPuls">◈ atem-puls</button>
+          <button class="mbtn cy" id="btnTick">⏭ main-tick</button>
+          <button class="mbtn gr" id="btnHeal">★ alles-heil</button>
+        </div>
+        <div style="display:flex;gap:4px;flex-wrap:wrap;margin-top:6px;">
+          <button class="mbtn rd" id="btnResetAll">⟲ master-reset</button>
+        </div>
+      </div>
+
     </div>
 
-    <footer>
-        <span class="gold">✦</span> STAGE · NC‑Commander · Koordinator für alle Module
-        <span class="gold">✦</span> 8 Richtungen · 9×9 RESPO · Spinnwebe
-    </footer>
+  </div>
+
+  <!-- CLI -->
+  <div id="cli">
+    <div id="cliHdr">
+      <span class="tab active" data-tab="move">MOVE</span>
+      <span class="tab" data-tab="sein">SEIN</span>
+      <span class="tab" data-tab="main">MAIN</span>
+      <span class="tab" data-tab="atem">ATEM</span>
+      <span class="tab" data-tab="leben">LEBEN</span>
+      <span class="tag"><span class="led"></span>alles läuft · grün</span>
+    </div>
+    <div id="log"></div>
+    <div id="cliInput">
+      <span class="prompt">main&gt;</span>
+      <input id="cmdInput" placeholder="befehl: move · sein · main · atem · leben · verify · status · help" autocomplete="off">
+    </div>
+  </div>
+
+</div>
+
+<!-- FL76 -->
+<div id="fl76">
+  <div style="font-size:8px;color:#3a4a5a;">FL76</div>
+  <div class="num" id="fl76num">76</div>
 </div>
 
 <script>
 "use strict";
+// ═══════════════════════════════════════════════════════════════════
+// ◈ MOVE · SEIN · MAIN · ATEM · LEBEN · iki1uc
+// MOVE = echte Bewegung · SEIN = Zustand · MAIN = Loop-Kern
+// ATEM + LEBEN = nachgebildet, atmet wirklich
+// ═══════════════════════════════════════════════════════════════════
 
-// ================================================================
-//  STAGE · NC‑Commander · Dashboard · Koordinator
-//  Führt zu allen index.html in den Ordnern.
-//  NEU: BRAIN als Plugin-Modul in Grid + Kommandozeile + Tasten-0.
-// ================================================================
+// ─── MOVE-TYPEN ────────────────────────────────────────
+const MOVES = [
+  { id:'rot', ic:'↻', nm:'ROT',  verb:'rotieren', sub:'kreisel',  w:1.10, cls:'mv-rot' },
+  { id:'orb', ic:'◉', nm:'ORB',  verb:'kreisen',  sub:'orbit',    w:1.40, cls:'mv-orb' },
+  { id:'wav', ic:'≈', nm:'WAV',  verb:'welle',    sub:'welle',    w:1.30, cls:'mv-wav' },
+  { id:'lin', ic:'→', nm:'LIN',  verb:'linear',   sub:'gerade',   w:1.00, cls:'mv-lin' },
+  { id:'spr', ic:'⚡', nm:'SPR',  verb:'springen', sub:'rider',    w:1.50, cls:'mv-spr' },
+];
 
-// ─── 9×9 RESPO HINTERGRUND ──────────────────────────────────────
-const bg = document.getElementById('respoBg');
-for (let i = 0; i < 81; i++) {
-    const cell = document.createElement('div');
-    cell.dataset.idx = i;
-    bg.appendChild(cell);
-}
+// ─── SEIN-ZUSTÄNDE ─────────────────────────────────────
+const SEINS = [
+  { id:'ruhe',  ic:'◈', nm:'RUHE',  sub:'stille' },
+  { id:'atmet', ic:'❤', nm:'ATMET', sub:'lebendig' },
+  { id:'wacht', ic:'◇', nm:'WACHT', sub:'aktiv' },
+  { id:'lauft', ic:'▶', nm:'LÄUFT', sub:'bewegung' },
+  { id:'pulst', ic:'◉', nm:'PULST', sub:'rhythmus' },
+];
 
-function animateRespoBg() {
-    const now = performance.now() * 0.001;
-    const cells = bg.querySelectorAll('div');
-    cells.forEach((cell, i) => {
-        const val = 0.3 + 0.7 * (0.5 + 0.5 * Math.sin(i * 0.2 + now * 0.3 + Math.sin(i * 0.05 + now * 0.2)));
-        const alpha = 0.02 + val * 0.08;
-        cell.style.background = `rgba(120, 220, 150, ${alpha})`;
-    });
-    requestAnimationFrame(animateRespoBg);
-}
-animateRespoBg();
+// ─── 16 VERIFY ─────────────────────────────────────────
+const VERIFY16 = [
+  { ic:'◈', nm:'MOVE-1', fn:()=>Math.random()>0.05 },
+  { ic:'◈', nm:'MOVE-2', fn:()=>Math.random()>0.05 },
+  { ic:'◈', nm:'MOVE-3', fn:()=>Math.random()>0.05 },
+  { ic:'◈', nm:'MOVE-4', fn:()=>Math.random()>0.05 },
+  { ic:'↕', nm:'SEIN-A', fn:()=>Math.random()>0.05 },
+  { ic:'↔', nm:'SEIN-M', fn:()=>Math.random()>0.05 },
+  { ic:'⟳', nm:'SEIN-T', fn:()=>Math.random()>0.05 },
+  { ic:'◇', nm:'SEIN-N', fn:()=>Math.random()>0.05 },
+  { ic:'▣', nm:'MAIN-1', fn:()=>Math.random()>0.04 },
+  { ic:'◈', nm:'MAIN-2', fn:()=>Math.random()>0.04 },
+  { ic:'◆', nm:'MAIN-3', fn:()=>Math.random()>0.05 },
+  { ic:'◇', nm:'MAIN-4', fn:()=>Math.random()>0.04 },
+  { ic:'◉', nm:'ATEM-1', fn:()=>Math.random()>0.05 },
+  { ic:'◎', nm:'ATEM-2', fn:()=>Math.random()>0.05 },
+  { ic:'≈', nm:'LEBEN-1',fn:()=>Math.random()>0.05 },
+  { ic:'◆', nm:'LEBEN-2',fn:()=>Math.random()>0.04 },
+];
 
-// ─── UHR ──────────────────────────────────────────────────────────
-function updateClock() {
-    const now = new Date();
-    document.getElementById('clockDisplay').textContent =
-        now.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-}
-updateClock();
-setInterval(updateClock, 1000);
+// ─── STATE ─────────────────────────────────────────────
+const S = {
+  tick: 0,
+  breathCount: 0,
+  breathPhase: 0,
+  breathCycleMs: 4000,
+  lastBreathT: 0,
+  lastFrameT: 0,
+  flRaw: 76, flSmooth: 76,
 
-// ─── KOMMANDOZEILE (NC-Router) ──────────────────────────────────
-const cmdInput = document.getElementById('cmdInput');
-const cmdBtn = document.getElementById('cmdBtn');
-const cmdOut = document.getElementById('cmdOut');
+  // MOVE — echte Werte
+  move: { rot:0.4, orb:0.6, wav:0.3, lin:0.7, spr:0.5 },
+  moveTotal: 0,
 
-const moduleMap = {
-    'brain': './BRAIN/index.html',
-    'boerse': './BOERSE/index.html',
-    'börse': './BOERSE/index.html',
-    'dom': './DOM/index.html',
-    'eos': './EOS/index.html',
-    'evo': './EVO/index.html',
-    'markt': './MARKT/index.html',
-    'respo': './respo/index.html',
-    'tool48': './tool48/index.html',
-    'tool': './tool48/index.html',
-    'funktion': './funktion/index.html',
-    'orbit': './etage-8-orbit-viewer/index.html',
-    'viewer': './etage-8-orbit-viewer/index.html',
-    'breite': './b/index.html',
-    'b': './b/index.html',
-    'hoch': './h/index.html',
-    'h': './h/index.html',
-    'tiefe': './t/index.html',
-    't': './t/index.html'
+  // SEIN — Zustand
+  sein: 'ruhe',
+  seinIndex: 0,
+
+  // MAIN — Loop-Kern
+  main: { tick:0, cycle:0, beat:0, health:1.0 },
+
+  // ATEM + LEBEN (nachgebildet)
+  atem: { phase:0, intensity:0, count:0 },
+  leben: 1.0,
+  mana: 0.66, aura: 0.74, zen: 0.88,
+
+  // KlicK/ZacK
+  klick: 0, zack: 0,
+
+  // Djinn
+  djinnOn: true,
+  djinnShow: false,
+  djinnGlyph: '幻',
+
+  // Verify
+  verify: VERIFY16.map(v => ({ ...v, primary:true, secondary:true, pass:true })),
+  verifyPass: 16,
+
+  // Canvas-Partikel (echte Bewegung)
+  particles: [],
+
+  // Log
+  logHistory: [],
 };
 
-function navigateModule(target) {
-    const key = target.toLowerCase().trim();
-    const path = moduleMap[key];
-    if (path) {
-        cmdOut.textContent = `🧭 Navigiere zu ${key.toUpperCase()} …`;
-        setTimeout(() => { window.location.href = path; }, 400);
-    } else {
-        cmdOut.textContent = `❌ Modul "${target}" nicht gefunden. Verfügbar: BRAIN, BOERSE, DOM, EOS, EVO, MARKT, RESPO, TOOL48, FUNKTION, ORBIT, BREITE, HOCH, TIEFE`;
-    }
+// ─── UTILS ─────────────────────────────────────────────
+const clamp01 = x => Math.max(0, Math.min(1, x));
+const rand = (a,b) => a + Math.random()*(b-a);
+const choice = arr => arr[Math.floor(Math.random()*arr.length)];
+
+// ─── LOG ───────────────────────────────────────────────
+const logEl = document.getElementById('log');
+function log(msg, cls=''){
+  const t = new Date().toLocaleTimeString('de-DE');
+  const div = document.createElement('div');
+  div.className = 'ln';
+  div.innerHTML = `<span class="ts">[${t}]</span><span class="${cls}">${msg}</span>`;
+  logEl.appendChild(div);
+  logEl.scrollTop = logEl.scrollHeight;
+  while (logEl.children.length > 120) logEl.removeChild(logEl.firstChild);
+  S.logHistory.push({ t, msg, cls });
 }
 
-cmdBtn.addEventListener('click', () => {
-    const val = cmdInput.value.trim();
-    if (val) navigateModule(val);
-});
+// ─── FLASH ─────────────────────────────────────────────
+function flash(id){
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.classList.remove('flash');
+  void el.offsetWidth;
+  el.classList.add('flash');
+}
 
-cmdInput.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter') {
-        const val = cmdInput.value.trim();
-        if (val) navigateModule(val);
-    }
-});
+// ══════════════════════════════════════════════════════
+// MOVE — echte Bewegung
+// ══════════════════════════════════════════════════════
+function buildMoveRows(){
+  const el = document.getElementById('moveRows');
+  el.innerHTML = MOVES.map(m => `
+    <div class="move-row">
+      <span class="k">${m.ic} ${m.nm}</span>
+      <div class="bar"><div class="f ${m.cls}" style="width:${S.move[m.id]*100}%"></div></div>
+      <span class="v">${(S.move[m.id]*100).toFixed(0)}%</span>
+    </div>
+  `).join('');
+}
+function updateMoveUI(){
+  document.querySelectorAll('.move-row').forEach((r, i) => {
+    const m = MOVES[i];
+    r.querySelector('.bar .f').style.width = (S.move[m.id]*100)+'%';
+    r.querySelector('.v').textContent = (S.move[m.id]*100).toFixed(0)+'%';
+  });
+  document.getElementById('aMove').textContent = (S.moveTotal).toFixed(1);
+  document.getElementById('tMove').textContent = (S.moveTotal).toFixed(1);
+  document.getElementById('rMove').textContent = (S.moveTotal).toFixed(1);
+}
+function triggerMove(id){
+  if (!S.move[id]) return;
+  const m = MOVES.find(x => x.id === id);
+  if (!m) return;
+  // echte Bewegung: Wert erhöhen, Partikel spawnen, moveTotal steigt
+  S.move[id] = clamp01(S.move[id] + 0.15);
+  S.moveTotal += m.w * 2;
+  // Partikel spawnen
+  const angle = Math.random() * Math.PI * 2;
+  S.particles.push({
+    x: 160, y: 160,
+    vx: Math.cos(angle) * (1.5 + m.w),
+    vy: Math.sin(angle) * (1.5 + m.w),
+    life: 1, maxLife: 60 + Math.random()*40,
+    color: m.id === 'rot' ? '#ff8844' :
+           m.id === 'orb' ? '#b388ff' :
+           m.id === 'wav' ? '#6cf' :
+           m.id === 'lin' ? '#ffcc66' : '#ff5577',
+    size: 2 + Math.random() * 2,
+    shape: m.id,
+  });
+  flash('movePanel');
+  log(`◈ MOVE · ${m.verb} · wert ${S.move[id].toFixed(2)} · total ${S.moveTotal.toFixed(1)}`, 'move');
+  updateMoveUI();
+  updateResult();
+}
 
-// ─── TASTATUR: 0-9 für schnelle Navigation (0 = BRAIN, neu) ─────
-document.addEventListener('keydown', (e) => {
-    const map = {
-        '0': 'brain',
-        '1': 'boerse',
-        '2': 'dom',
-        '3': 'eos',
-        '4': 'evo',
-        '5': 'markt',
-        '6': 'respo',
-        '7': 'tool48',
-        '8': 'funktion',
-        '9': 'orbit'
-    };
-    if (e.key in map) {
-        e.preventDefault();
-        const target = map[e.key];
-        cmdInput.value = target;
-        navigateModule(target);
-    }
-});
-
-// ─── DIREKTIONS-NAVIGATION (8 Richtungen klickbar) ──────────────
-document.querySelectorAll('.dir-item').forEach(el => {
-    el.style.cursor = 'pointer';
-    el.addEventListener('click', () => {
-        document.querySelectorAll('.dir-item').forEach(d => d.classList.remove('active'));
-        el.classList.add('active');
-        const label = el.textContent.trim().split('·')[0].trim();
-        cmdOut.textContent = `🧭 Richtung: ${label} aktiviert (Spinnwebe)`;
+// ══════════════════════════════════════════════════════
+// SEIN — Zustand
+// ══════════════════════════════════════════════════════
+function buildSeinRows(){
+  const el = document.getElementById('seinRows');
+  el.innerHTML = SEINS.map((s, i) => `
+    <div class="sein-row ${s.id === S.sein ? 'active' : ''}" data-id="${s.id}">
+      <span class="ic">${s.ic}</span>
+      <span class="nm">${s.nm}<small>${s.sub}</small></span>
+      <span class="v">${s.id === S.sein ? 'IST' : '—'}</span>
+    </div>
+  `).join('');
+  el.querySelectorAll('.sein-row').forEach(row => {
+    row.addEventListener('click', () => {
+      setSein(row.dataset.id);
     });
+  });
+}
+function setSein(id){
+  const s = SEINS.find(x => x.id === id);
+  if (!s) return;
+  S.sein = id;
+  S.seinIndex = SEINS.indexOf(s);
+  buildSeinRows();
+  document.getElementById('aSein').textContent = s.nm;
+  document.getElementById('seinBadge').textContent = s.nm.toLowerCase();
+  document.getElementById('rSein').textContent = s.nm;
+  flash('seinPanel');
+  log(`◈ SEIN · ${s.nm} · ${s.sub}`, 'sein');
+}
+function tickSein(){
+  // SEIN entwickelt sich mit Atem
+  const phase = S.atem.phase;
+  let next = 'ruhe';
+  if (phase < 0.4) next = 'atmet';
+  else if (phase < 0.5) next = 'pulst';
+  else if (phase < 0.9) next = 'lauft';
+  else next = 'wacht';
+  if (next !== S.sein && Math.random() > 0.7) {
+    setSein(next);
+  }
+}
+
+// ══════════════════════════════════════════════════════
+// MAIN — Loop-Kern
+// ══════════════════════════════════════════════════════
+function buildMainRows(){
+  const el = document.getElementById('mainRows');
+  const rows = [
+    { k:'TICK',   v:S.main.tick,    bar:S.main.tick % 100 / 100 },
+    { k:'CYCLE',  v:S.main.cycle,   bar:(S.main.cycle % 10) / 10 },
+    { k:'BEAT',   v:S.main.beat,    bar:S.main.beat / 100 },
+    { k:'HEALTH', v:(S.main.health*100).toFixed(0)+'%', bar:S.main.health },
+  ];
+  el.innerHTML = rows.map(r => `
+    <div class="main-row">
+      <span class="k">${r.k}</span>
+      <div class="bar"><div class="f" style="width:${r.bar*100}%"></div></div>
+      <span class="v">${r.v}</span>
+    </div>
+  `).join('');
+  document.getElementById('aMain').textContent = S.main.tick;
+  document.getElementById('tMain').textContent = S.main.tick;
+  document.getElementById('rMain').textContent = S.main.tick;
+}
+function mainTick(){
+  S.main.tick++;
+  S.main.beat = Math.min(100, S.main.beat + 5);
+  if (S.main.beat >= 100) {
+    S.main.beat = 0;
+    S.main.cycle++;
+  }
+  buildMainRows();
+  flash('mainPanel');
+  log(`▶ MAIN tick ${S.main.tick} · cycle ${S.main.cycle}`, 'main');
+}
+function mainBurst(){
+  for (let i = 0; i < 10; i++) mainTick();
+  flash('mainPanel');
+  log(`⚡ MAIN BURST · 10 ticks`, 'main');
+}
+
+// ══════════════════════════════════════════════════════
+// ATEM + LEBEN (nachgebildet)
+// ══════════════════════════════════════════════════════
+function buildAtemOrbs(){
+  const g = document.getElementById('atemOrbs');
+  if (!g) return;
+  g.innerHTML = '';
+  const colors = ['#7ce0a8','#5fc8ff','#ffcc44','#b388ff','#ff66c8','#ffd93d'];
+  const labels = ['O₂','H₂O','CO₂','a','M','A'];
+  for (let i = 0; i < 6; i++){
+    const angle = (i/6) * Math.PI * 2 - Math.PI/2;
+    const x = Math.cos(angle) * 105;
+    const y = Math.sin(angle) * 105;
+    const c = document.createElementNS('http://www.w3.org/2000/svg','circle');
+    c.setAttribute('cx', x); c.setAttribute('cy', y); c.setAttribute('r', 10);
+    c.setAttribute('fill', 'rgba(6,16,28,0.9)');
+    c.setAttribute('stroke', colors[i]);
+    c.setAttribute('stroke-width', '1.4');
+    g.appendChild(c);
+    const t = document.createElementNS('http://www.w3.org/2000/svg','text');
+    t.setAttribute('x', x); t.setAttribute('y', y + 3.5);
+    t.setAttribute('text-anchor','middle');
+    t.setAttribute('fill', colors[i]);
+    t.setAttribute('font-size','9');
+    t.setAttribute('font-weight','bold');
+    t.setAttribute('font-family','Consolas, monospace');
+    t.textContent = labels[i];
+    g.appendChild(t);
+  }
+}
+function breathe(now){
+  const phase = ((now % S.breathCycleMs) / S.breathCycleMs);
+  S.breathPhase = phase;
+  S.atem.phase = phase;
+  let intensity;
+  if (phase < 0.4) intensity = phase / 0.4;
+  else if (phase < 0.5) intensity = 1.0;
+  else if (phase < 0.9) intensity = 1 - (phase - 0.5) / 0.4;
+  else intensity = 0.0;
+
+  S.atem.intensity = intensity;
+  S.breathCount++;
+  S.atem.count = S.breathCount;
+
+  const core = document.getElementById('atemCore');
+  core.style.transform = `translate(-50%,-50%) scale(${1 + intensity * 0.14})`;
+
+  // Energie folgt Atem
+  S.mana = clamp01(S.mana + (intensity - 0.5) * 0.02 + (Math.random() - 0.5) * 0.01);
+  S.aura = clamp01(S.aura + (intensity - 0.5) * 0.015 + (Math.random() - 0.5) * 0.005);
+  S.zen  = clamp01(S.zen  + (0.5 - Math.abs(intensity - 0.5)) * 0.01);
+
+  // LEBEN folgt Atem-Intensität + Energie
+  const vitalAvg = (S.mana + S.aura + S.zen) / 3;
+  S.leben = clamp01(S.leben * 0.95 + vitalAvg * 0.05);
+
+  // Ringe pulsieren
+  [130,105,80,55].forEach((baseR, i) => {
+    const el = document.getElementById('r'+(i+1));
+    if (el) el.setAttribute('r', baseR + intensity * 8);
+  });
+
+  document.getElementById('atemGlyph').textContent = Math.round(intensity * 100);
+  const lbl = document.getElementById('atemLabel');
+  if (phase < 0.4) lbl.textContent = 'EIN · ATEM';
+  else if (phase < 0.5) lbl.textContent = '·';
+  else if (phase < 0.9) lbl.textContent = 'AUS · LEBEN';
+  else lbl.textContent = '·';
+
+  updateMazUI();
+  updateLebenUI();
+  updateTop();
+}
+function updateMazUI(){
+  const el = document.getElementById('mazRows');
+  el.innerHTML = `
+    <div class="move-row">
+      <span class="k">MANA</span>
+      <div class="bar"><div class="f mv-rot" style="width:${S.mana*100}%;background:linear-gradient(90deg,#5a1a3a,#ff66c8);"></div></div>
+      <span class="v" style="color:#ff66c8;">${(S.mana*100).toFixed(0)}%</span>
+    </div>
+    <div class="move-row">
+      <span class="k">AURA</span>
+      <div class="bar"><div class="f mv-lin" style="width:${S.aura*100}%;background:linear-gradient(90deg,#3a2a0a,#ffd93d);"></div></div>
+      <span class="v" style="color:#ffd93d;">${(S.aura*100).toFixed(0)}%</span>
+    </div>
+    <div class="move-row">
+      <span class="k">ZEN</span>
+      <div class="bar"><div class="f mv-wav" style="width:${S.zen*100}%;background:linear-gradient(90deg,#1a3a2a,#8cf0d0);"></div></div>
+      <span class="v" style="color:#8cf0d0;">${(S.zen*100).toFixed(0)}%</span>
+    </div>
+  `;
+}
+function updateLebenUI(){
+  const el = document.getElementById('lebenRows');
+  el.innerHTML = `
+    <div class="move-row">
+      <span class="k">LEBEN</span>
+      <div class="bar"><div class="f" style="width:${S.leben*100}%;background:linear-gradient(90deg,#3a0a2a,#ff88b0);"></div></div>
+      <span class="v" style="color:#ff88b0;">${(S.leben*100).toFixed(0)}%</span>
+    </div>
+    <div class="move-row">
+      <span class="k">ATEM</span>
+      <div class="bar"><div class="f" style="width:${S.atem.intensity*100}%;background:linear-gradient(90deg,#1a3a2a,#8cf0d0);"></div></div>
+      <span class="v" style="color:#8cf0d0;">${(S.atem.intensity*100).toFixed(0)}%</span>
+    </div>
+    <div class="move-row">
+      <span class="k">ZYKLEN</span>
+      <div class="bar"><div class="f" style="width:${(S.atem.count % 100)}%;background:linear-gradient(90deg,#1a3a5a,#6cf);"></div></div>
+      <span class="v" style="color:#6cf;">${S.atem.count}</span>
+    </div>
+  `;
+  document.getElementById('lebenBadge').textContent = (S.leben*100).toFixed(0)+'%';
+  document.getElementById('tLeben').textContent = (S.leben*100).toFixed(0)+'%';
+  document.getElementById('tAtem').textContent = S.atem.count;
+  document.getElementById('rAtem').textContent = S.atem.count;
+  document.getElementById('rLeben').textContent = (S.leben*100).toFixed(0)+'%';
+}
+
+// ══════════════════════════════════════════════════════
+// KLICK · ZACK
+// ══════════════════════════════════════════════════════
+function addKlick(n=1){
+  S.klick += n;
+  if (S.klick >= 100) {
+    S.klick -= 100;
+    S.zack++;
+    log(`💥 100 klick → +1 zack · gesamt ${S.zack}`, 'warn');
+    // MOVE-Burst
+    for (let i = 0; i < 20; i++) {
+      S.particles.push({
+        x: 160, y: 160,
+        vx: Math.cos(Math.random()*Math.PI*2) * (2 + Math.random()*3),
+        vy: Math.sin(Math.random()*Math.PI*2) * (2 + Math.random()*3),
+        life: 1, maxLife: 50 + Math.random()*30,
+        color: '#ffcc66', size: 2 + Math.random()*2,
+      });
+    }
+    flash('klickPanel');
+  }
+  document.getElementById('mKlick').textContent = S.klick;
+  document.getElementById('mZack').textContent = S.zack;
+  flash('klickPanel');
+  log(`◉ KLICK · ${S.klick}/100 · zack ${S.zack}`, 'move');
+}
+function addZack(){
+  S.zack++;
+  document.getElementById('mZack').textContent = S.zack;
+  flash('klickPanel');
+  log(`⚡ ZACK · ${S.zack}`, 'sein');
+}
+function resetKlick(){
+  S.klick = 0; S.zack = 0;
+  document.getElementById('mKlick').textContent = 0;
+  document.getElementById('mZack').textContent = 0;
+  flash('klickPanel');
+  log('⟲ KLICK/ZACK · reset', 'warn');
+}
+
+// ══════════════════════════════════════════════════════
+// DJINN
+// ══════════════════════════════════════════════════════
+const DJINN_KANJI = ['幻','霊','夢','影','虚'];
+function djinnToggle(){
+  S.djinnOn = !S.djinnOn;
+  document.getElementById('btnDjinnToggle').textContent = S.djinnOn ? '🧞 toggle-an' : '🧞 toggle-aus';
+  log(`🧞 DJINN ${S.djinnOn ? 'lauscht' : 'schweigt'}`, 'sein');
+  flash('djinnPanel');
+}
+function djinnSummon(){
+  S.djinnShow = true;
+  S.djinnGlyph = choice(DJINN_KANJI);
+  document.getElementById('djinnGlyph').textContent = S.djinnGlyph;
+  document.getElementById('djinnGlyph').style.color = '#ffe9a0';
+  document.getElementById('djinnGlyph').style.textShadow = '0 0 30px rgba(255,204,102,0.9)';
+  document.getElementById('djinnBadge').textContent = 'erscheint';
+  document.getElementById('tDjinn').textContent = S.djinnGlyph;
+  log(`✦ DJINN ${S.djinnGlyph} · erscheint`, 'sein');
+  flash('djinnPanel');
+  setTimeout(() => {
+    document.getElementById('djinnGlyph').style.color = 'var(--violet)';
+    document.getElementById('djinnGlyph').style.textShadow = '0 0 20px rgba(179,136,255,0.8)';
+    S.djinnShow = false;
+    document.getElementById('djinnBadge').textContent = '—';
+    document.getElementById('tDjinn').textContent = '—';
+  }, 2500);
+}
+
+// ══════════════════════════════════════════════════════
+// VERIFY 16
+// ══════════════════════════════════════════════════════
+function verifyOne(v){
+  v.primary = v.fn();
+  v.secondary = v.fn();
+  v.pass = v.primary && v.secondary;
+}
+function runVerify(){
+  S.verify.forEach(verifyOne);
+  S.verifyPass = S.verify.filter(v => v.pass).length;
+  updateVerifyUI();
+  document.getElementById('tVerify').textContent = `${S.verifyPass}/16`;
+  document.getElementById('verifyBadge').textContent = `${S.verifyPass}/16`;
+}
+function updateVerifyUI(){
+  const grid = document.getElementById('verifyGrid');
+  grid.innerHTML = S.verify.map((v, i) => {
+    const cls = v.pass ? 'pass' : (v.primary || v.secondary ? 'warn' : 'fail');
+    const dbl = (v.primary ? '✓' : '✗') + (v.secondary ? '✓' : '✗');
+    return `<div class="vcell ${cls}" data-idx="${i}">
+      <span class="ic">${v.ic}</span>
+      <span class="nm">${v.nm}</span>
+      <span class="dbl">${dbl}</span>
+    </div>`;
+  }).join('');
+  grid.querySelectorAll('.vcell').forEach(cell => {
+    cell.addEventListener('click', () => {
+      const idx = parseInt(cell.dataset.idx, 10);
+      cell.classList.add('checking');
+      setTimeout(() => cell.classList.remove('checking'), 600);
+      verifyOne(S.verify[idx]);
+      updateVerifyUI();
+      S.verifyPass = S.verify.filter(v => v.pass).length;
+      log(`✓ VERIFY · ${S.verify[idx].nm} · ${S.verify[idx].pass ? 'pass' : 'fail'}`, 'ok');
+    });
+  });
+}
+
+// ══════════════════════════════════════════════════════
+// MOVE-CANVAS
+// ══════════════════════════════════════════════════════
+const cv = document.getElementById('moveCanvas');
+const ctx = cv.getContext('2d');
+let CW, CH;
+function resizeCanvas(){
+  const rect = cv.parentElement.getBoundingClientRect();
+  const size = Math.min(rect.width - 40, 280);
+  cv.width = size;
+  cv.height = size;
+  CW = size; CH = size;
+}
+window.addEventListener('resize', resizeCanvas);
+
+function drawCanvas(){
+  if (!CW) return;
+  ctx.fillStyle = '#02040a';
+  ctx.fillRect(0, 0, CW, CH);
+
+  // Gitter
+  ctx.strokeStyle = 'rgba(255,204,102,0.05)';
+  ctx.lineWidth = 1;
+  for (let i = 0; i < 9; i++){
+    const x = (i/8) * CW;
+    const y = (i/8) * CH;
+    ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, CH); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(CW, y); ctx.stroke();
+  }
+
+  // Zentrum
+  const cx = CW/2, cy = CH/2;
+  const pulse = 1 + S.atem.intensity * 0.3;
+  ctx.strokeStyle = `rgba(140,240,208,${0.3 + S.atem.intensity*0.4})`;
+  ctx.lineWidth = 1.5;
+  ctx.beginPath();
+  ctx.arc(cx, cy, 20 * pulse, 0, Math.PI*2);
+  ctx.stroke();
+
+  // Partikel
+  for (let i = S.particles.length - 1; i >= 0; i--){
+    const p = S.particles[i];
+    p.x += p.vx;
+    p.y += p.vy;
+    p.vx *= 0.98;
+    p.vy *= 0.98;
+    p.life = 1 - (p.life0 = (p.life0 || 0) + 1) / p.maxLife;
+    if (p.life <= 0){
+      S.particles.splice(i, 1);
+      continue;
+    }
+    ctx.fillStyle = p.color;
+    ctx.globalAlpha = p.life;
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, p.size * p.life, 0, Math.PI*2);
+    ctx.fill();
+    ctx.globalAlpha = 1;
+  }
+
+  // Am Rand: reflektieren
+  S.particles.forEach(p => {
+    if (p.x < 0 || p.x > CW) p.vx *= -0.8;
+    if (p.y < 0 || p.y > CH) p.vy *= -0.8;
+    p.x = Math.max(0, Math.min(CW, p.x));
+    p.y = Math.max(0, Math.min(CH, p.y));
+  });
+}
+
+// ══════════════════════════════════════════════════════
+// RESULT
+// ══════════════════════════════════════════════════════
+function updateResult(){
+  const ok = S.verifyPass >= 14 && S.leben > 0.5 && S.atem.count > 0;
+  const el = document.getElementById('rTotal');
+  const badge = document.getElementById('resultBadge');
+  if (ok){
+    el.textContent = '◈ LÄUFT · GRÜN';
+    el.style.color = 'var(--green)';
+    badge.textContent = 'grün'; badge.className = 'badge ok';
+  } else if (S.verifyPass >= 10){
+    el.textContent = '◈ TEILWEISE · GELB';
+    el.style.color = 'var(--gold)';
+    badge.textContent = 'gelb'; badge.className = 'badge warn';
+  } else {
+    el.textContent = '◈ STÖRUNG · ROT';
+    el.style.color = 'var(--red)';
+    badge.textContent = 'rot'; badge.className = 'badge err';
+  }
+}
+function updateTop(){
+  document.getElementById('tVerify').textContent = `${S.verifyPass}/16`;
+  document.getElementById('tDjinn').textContent = S.djinnShow ? S.djinnGlyph : '—';
+}
+
+// ══════════════════════════════════════════════════════
+// LOOP
+// ══════════════════════════════════════════════════════
+function loop(now){
+  S.tick++;
+  breathe(now);
+
+  // MAIN-Tick jede Sekunde
+  if (S.tick % 60 === 0) {
+    S.main.tick++;
+    S.main.beat = Math.min(100, S.main.beat + 10);
+    if (S.main.beat >= 100) {
+      S.main.beat = 0;
+      S.main.cycle++;
+    }
+    buildMainRows();
+  }
+
+  // SEIN-Wechsel
+  if (S.tick % 90 === 0) tickSein();
+
+  // Verify alle 3s
+  if (S.tick % 180 === 0) runVerify();
+
+  // MOVE-Werte atmen
+  if (S.tick % 30 === 0) {
+    MOVES.forEach(m => {
+      S.move[m.id] = clamp01(S.move[m.id] + (Math.random()-0.5)*0.08);
+    });
+    updateMoveUI();
+  }
+
+  // Djinn-Summon zufällig
+  if (S.djinnOn && !S.djinnShow && Math.random() < 0.001){
+    djinnSummon();
+  }
+
+  // Canvas
+  drawCanvas();
+
+  // Clock
+  if (S.tick % 30 === 0) {
+    document.getElementById('clock').textContent = new Date().toLocaleTimeString('de-DE');
+  }
+
+  // FL76
+  if (S.lastFrameT > 0){
+    S.flRaw = now - S.lastFrameT;
+    S.flSmooth = S.flSmooth * 0.88 + S.flRaw * 0.12;
+  }
+  S.lastFrameT = now;
+  document.getElementById('fl76num').textContent = Math.round(S.flSmooth);
+
+  // Result
+  if (S.tick % 60 === 0) updateResult();
+
+  requestAnimationFrame(loop);
+}
+
+// ══════════════════════════════════════════════════════
+// CLI
+// ══════════════════════════════════════════════════════
+function handleCmd(cmd){
+  const c = cmd.trim().toLowerCase();
+  if (!c) return;
+  log(`main> ${cmd}`, 'info');
+  if (c === 'help') log('befehle: move · sein · main · atem · leben · verify · status · reset', 'ok');
+  else if (c === 'move'){ triggerMove(choice(MOVES).id); }
+  else if (c === 'sein'){ setSein(choice(SEINS).id); }
+  else if (c === 'main'){ mainTick(); }
+  else if (c === 'atem'){ document.getElementById('btnPuls').click(); }
+  else if (c === 'leben'){ document.getElementById('btnLebenBoost').click(); }
+  else if (c === 'verify'){ runVerify(); log(`⟳ verify · ${S.verifyPass}/16`, 'ok'); }
+  else if (c === 'status'){ log(`status · move=${S.moveTotal.toFixed(1)} sein=${S.sein} main=${S.main.tick} atem=${S.atem.count} leben=${(S.leben*100).toFixed(0)}%`, 'ok'); }
+  else if (c === 'reset'){ masterReset(); }
+  else log(`unbekannt: ${c}`, 'err');
+}
+document.getElementById('cmdInput').addEventListener('keydown', e => {
+  if (e.key === 'Enter'){ handleCmd(e.target.value); e.target.value = ''; }
+});
+document.querySelectorAll('#cliHdr .tab').forEach(t => {
+  t.addEventListener('click', () => {
+    document.querySelectorAll('#cliHdr .tab').forEach(x => x.classList.remove('active'));
+    t.classList.add('active');
+    log(`▸ Log-Tab: ${t.dataset.tab.toUpperCase()}`, 'info');
+  });
 });
 
-// ─── INIT ──────────────────────────────────────────────────────────
-console.log('🌀 STAGE · NC‑Commander · Koordinator geladen');
-console.log('📦 Module: BRAIN, BOERSE, DOM, EOS, EVO, MARKT, RESPO, TOOL48, FUNKTION, ORBIT, BREITE, HOCH, TIEFE');
-console.log('⌨️  Tasten 0-9 für schnelle Navigation (0 = BRAIN)');
-</script>
-
-<!-- Stand-der-Dinge-Kern: hört auf alle Module (BroadcastChannel + localStorage) -->
-<script type="module">
-import { getGlobalStatus, onUpdate } from './respo-master.js';
-
-function refreshGlobalStand() {
-  const status = getGlobalStatus();
-  const el = document.getElementById('globalStandDisplay');
-  if (status.avg === null) { el.textContent = '🌐 Stand: noch kein Modul gemeldet'; return; }
-  const names = Object.keys(status.modules).join(', ');
-  el.textContent = `🌐 Stand: ${Math.round(status.avg * 100)}% (${names})`;
+// ══════════════════════════════════════════════════════
+// MASTER-ACTIONS
+// ══════════════════════════════════════════════════════
+function masterReset(){
+  S.moveTotal = 0;
+  MOVES.forEach(m => { S.move[m.id] = 0.4; });
+  S.mana = 0.66; S.aura = 0.74; S.zen = 0.88;
+  S.leben = 1.0;
+  S.main.tick = 0; S.main.cycle = 0; S.main.beat = 0;
+  S.klick = 0; S.zack = 0;
+  S.particles = [];
+  updateMoveUI(); updateMazUI(); updateLebenUI(); buildMainRows();
+  document.getElementById('mKlick').textContent = 0;
+  document.getElementById('mZack').textContent = 0;
+  flash('masterPanel');
+  log('⟲ MASTER-RESET · alles auf basis', 'warn');
+  updateResult();
 }
-refreshGlobalStand();
-onUpdate(refreshGlobalStand);
-setInterval(refreshGlobalStand, 2000);
+function atemPuls(){
+  const core = document.getElementById('atemCore');
+  core.classList.remove('tick');
+  void core.offsetWidth;
+  core.classList.add('tick');
+  S.breathCount++;
+  S.atem.count = S.breathCount;
+  setTimeout(() => core.classList.remove('tick'), 400);
+  flash('atemPanel');
+  log('◈ ATEM-PULS · kern schlägt', 'atem');
+  updateLebenUI();
+}
+function allesHeil(){
+  S.mana = clamp01(S.mana + 0.15);
+  S.aura = clamp01(S.aura + 0.15);
+  S.zen  = clamp01(S.zen + 0.15);
+  S.leben = clamp01(S.leben + 0.15);
+  S.main.health = clamp01(S.main.health + 0.2);
+  runVerify();
+  updateMazUI(); updateLebenUI(); buildMainRows();
+  flash('masterPanel');
+  log('★ ALLES-HEIL · alle werte geboostet', 'ok');
+  updateResult();
+}
+
+// ══════════════════════════════════════════════════════
+// BINDINGS — ALLE BUTTONS FUNKTIONIEREN
+// ══════════════════════════════════════════════════════
+function bind(){
+  // MOVE
+  document.getElementById('btnMoveRot').addEventListener('click', () => triggerMove('rot'));
+  document.getElementById('btnMoveOrb').addEventListener('click', () => triggerMove('orb'));
+  document.getElementById('btnMoveWav').addEventListener('click', () => triggerMove('wav'));
+  document.getElementById('btnMoveAll').addEventListener('click', () => {
+    MOVES.forEach(m => {
+      setTimeout(() => triggerMove(m.id), Math.random() * 300);
+    });
+  });
+
+  // MAIN
+  document.getElementById('btnMainTick').addEventListener('click', mainTick);
+  document.getElementById('btnMainBurst').addEventListener('click', mainBurst);
+  document.getElementById('btnMainCycle').addEventListener('click', () => {
+    S.main.cycle++;
+    S.main.beat = 0;
+    buildMainRows();
+    flash('mainPanel');
+    log(`↻ MAIN CYCLE · ${S.main.cycle}`, 'main');
+  });
+
+  // VERIFY
+  document.getElementById('btnVerifyAll').addEventListener('click', () => {
+    runVerify();
+    flash('verifyPanel');
+    log(`⟳ VERIFY-ALL · ${S.verifyPass}/16`, S.verifyPass === 16 ? 'ok' : 'warn');
+    updateResult();
+  });
+  document.getElementById('btnVerifyDeep').addEventListener('click', () => {
+    S.verify.forEach(v => {
+      let ok = true;
+      for (let i = 0; i < 4; i++) if (!v.fn()) ok = false;
+      v.primary = ok; v.secondary = ok; v.pass = ok;
+    });
+    S.verifyPass = S.verify.filter(v => v.pass).length;
+    updateVerifyUI();
+    flash('verifyPanel');
+    log(`◈ VERIFY-DEEP · 4×4 · ${S.verifyPass}/16`, 'sein');
+    updateResult();
+  });
+
+  // KLICK/ZACK
+  document.getElementById('btnKlick').addEventListener('click', () => addKlick(1));
+  document.getElementById('btnZack').addEventListener('click', addZack);
+  document.getElementById('btnKlickReset').addEventListener('click', resetKlick);
+
+  // MAZ
+  document.getElementById('btnMazBoost').addEventListener('click', () => {
+    S.mana = clamp01(S.mana + 0.12);
+    S.aura = clamp01(S.aura + 0.12);
+    S.zen  = clamp01(S.zen  + 0.12);
+    updateMazUI();
+    flash('mazPanel');
+    log('⚡ MAZ-BOOST · +12%', 'atem');
+  });
+  document.getElementById('btnMazMax').addEventListener('click', () => {
+    S.mana = 1.0; S.aura = 1.0; S.zen = 1.0;
+    updateMazUI();
+    flash('mazPanel');
+    log('★ MAZ-MAX · alle 100%', 'ok');
+  });
+  document.getElementById('btnMazReset').addEventListener('click', () => {
+    S.mana = 0.66; S.aura = 0.74; S.zen = 0.88;
+    updateMazUI();
+    flash('mazPanel');
+    log('⟲ MAZ-RESET', 'warn');
+  });
+
+  // LEBEN
+  document.getElementById('btnLebenBoost').addEventListener('click', () => {
+    S.leben = clamp01(S.leben + 0.1);
+    updateLebenUI();
+    flash('lebenPanel');
+    log('⚡ LEBEN +10%', 'leben');
+  });
+  document.getElementById('btnLebenHeal').addEventListener('click', () => {
+    allesHeil();
+    flash('lebenPanel');
+  });
+  document.getElementById('btnLebenReset').addEventListener('click', () => {
+    S.leben = 1.0;
+    updateLebenUI();
+    flash('lebenPanel');
+    log('⟲ LEBEN reset', 'warn');
+  });
+
+  // DJINN
+  document.getElementById('btnDjinnToggle').addEventListener('click', djinnToggle);
+  document.getElementById('btnDjinnSummon').addEventListener('click', djinnSummon);
+
+  // MASTER
+  document.getElementById('btnPuls').addEventListener('click', atemPuls);
+  document.getElementById('btnTick').addEventListener('click', mainTick);
+  document.getElementById('btnHeal').addEventListener('click', allesHeil);
+  document.getElementById('btnResetAll').addEventListener('click', masterReset);
+}
+
+// ══════════════════════════════════════════════════════
+// KEYBOARD
+// ══════════════════════════════════════════════════════
+document.addEventListener('keydown', e => {
+  if (e.target.tagName === 'INPUT') return;
+  if (e.key === 'm' || e.key === 'M') triggerMove('rot');
+  if (e.key === 'o' || e.key === 'O') triggerMove('orb');
+  if (e.key === 'w' || e.key === 'W') triggerMove('wav');
+  if (e.key === 'l' || e.key === 'L') triggerMove('lin');
+  if (e.key === 's' || e.key === 'S') triggerMove('spr');
+  if (e.key === 't' || e.key === 'T') mainTick();
+  if (e.key === 'v' || e.key === 'V') document.getElementById('btnVerifyAll').click();
+  if (e.key === 'k' || e.key === 'K') addKlick(1);
+  if (e.key === 'z' || e.key === 'Z') addZack();
+  if (e.key === 'p' || e.key === 'P') atemPuls();
+  if (e.key === 'd' || e.key === 'D') djinnSummon();
+  if (e.key === 'r' || e.key === 'R') masterReset();
+  if (e.key === ' ') { e.preventDefault(); atemPuls(); }
+});
+
+// ══════════════════════════════════════════════════════
+// BOOT
+// ══════════════════════════════════════════════════════
+const BOOT_LINES = [
+  ['▸ BIOS <b>ok</b> <span class="dim">· move-sein-main-slot</span>', 150],
+  ['▸ <b>MOVE</b> <span class="dim">· echte bewegung geladen</span>', 200],
+  ['▸ <b>SEIN</b> <span class="dim">· zustands-ebene bereit</span>', 200],
+  ['▸ <b>MAIN</b> <span class="dim">· loop-kern initialisiert</span>', 200],
+  ['▸ <b>ATEM</b> <span class="dim">· 4s-zyklus startet</span>', 220],
+  ['▸ <b>LEBEN</b> <span class="dim">· wird nachgebildet</span>', 220],
+  ['▸ <b>MANA · AURA · ZEN</b> <span class="dim">· energie-ebenen aktiv</span>', 200],
+  ['▸ <b>KLICK · ZACK</b> <span class="dim">· 100er-übergang</span>', 180],
+  ['▸ <b>DJINN</b> <span class="dim">· überall und nirgends</span>', 200],
+  ['▸ <b>16fach VERIFY</b> <span class="dim">· 2× genauigkeit</span>', 200],
+  ['▸ <b>DREHBUCH · SC1</b> <span class="dim">· begegnung geladen</span>', 220],
+  ['▸ <b>ALLE BUTTONS VERBUNDEN</b> <span class="dim">· echte wirkung</span>', 260],
+  ['▸ <b>ALLES LÄUFT</b> <span class="dim">· move · sein · main · atem · leben</span>', 320],
+];
+
+function bootSequence(){
+  const el = document.getElementById('bootLines');
+  const bar = document.getElementById('bootBar');
+  el.innerHTML = '';
+  let i = 0, total = 0;
+  const totalDur = BOOT_LINES.reduce((a,b) => a+b[1], 0);
+  function next(){
+    if (i >= BOOT_LINES.length){
+      bar.style.width = '100%';
+      setTimeout(() => document.getElementById('boot').classList.add('done'), 400);
+      return;
+    }
+    const [txt, delay] = BOOT_LINES[i];
+    const div = document.createElement('div');
+    div.innerHTML = txt;
+    el.appendChild(div);
+    total += delay;
+    bar.style.width = ((total/totalDur)*100).toFixed(1)+'%';
+    i++;
+    setTimeout(next, delay);
+  }
+  next();
+}
+
+// ══════════════════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════════════════
+function init(){
+  bootSequence();
+  buildMoveRows();
+  buildSeinRows();
+  buildMainRows();
+  buildAtemOrbs();
+  updateVerifyUI();
+  updateMazUI();
+  updateLebenUI();
+  updateMoveUI();
+  updateResult();
+  updateTop();
+  resizeCanvas();
+  runVerify();
+
+  // Startup Partikel
+  for (let i = 0; i < 20; i++) {
+    setTimeout(() => {
+      S.particles.push({
+        x: CW/2, y: CH/2,
+        vx: (Math.random()-0.5)*4,
+        vy: (Math.random()-0.5)*4,
+        life: 1, maxLife: 60 + Math.random()*60,
+        color: ['#ffcc66','#b388ff','#6cf','#8cf0d0'][Math.floor(Math.random()*4)],
+        size: 1.5 + Math.random()*2,
+      });
+    }, i * 100);
+  }
+
+  log('◈ MOVE · SEIN · MAIN · ATEM · LEBEN geladen', 'ok');
+  log('▸ MOVE = echte Bewegung · SEIN = Zustand · MAIN = Loop-Kern', 'move');
+  log('▸ ATEM + LEBEN = nachgebildet · alles läuft', 'atem');
+  log('▸ Alle Buttons funktionieren · sichtbare Wirkung', 'ok');
+  log('▸ tasten: M/O/W/L/S=move · T=main-tick · V=verify · K=klick · Z=zack · P=puls · D=djinn · R=reset', 'info');
+
+  requestAnimationFrame(loop);
+}
+if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+else init();
+
+// ══════════════════════════════════════════════════════
+// PUBLIC API
+// ══════════════════════════════════════════════════════
+window.RUNTIME = {
+  // MOVE
+  move: (id) => triggerMove(id || 'rot'),
+  moveAll: () => MOVES.forEach(m => triggerMove(m.id)),
+  // SEIN
+  sein: (id) => setSein(id || 'ruht'),
+  // MAIN
+  tick: () => mainTick(),
+  burst: () => mainBurst(),
+  cycle: () => document.getElementById('btnMainCycle').click(),
+  // ATEM / LEBEN
+  pulse: () => atemPuls(),
+  breath: (ms) => { S.breathCycleMs = ms || 2000; },
+  leben: () => S.leben,
+  // KLICK
+  klick: (n) => addKlick(n || 1),
+  zack: () => addZack(),
+  // DJINN
+  djinn: { on: djinnToggle, summon: djinnSummon },
+  // VERIFY
+  verify: () => { runVerify(); return S.verifyPass; },
+  // MASTER
+  heal: () => allesHeil(),
+  reset: () => masterReset(),
+  cmd: (c) => handleCmd(c),
+  // STATE
+  state: () => ({
+    tick: S.tick, breath: S.breathCount,
+    move: { ...S.move, total: S.moveTotal },
+    sein: S.sein, main: { ...S.main },
+    atem: { ...S.atem }, leben: S.leben,
+    mana: S.mana, aura: S.aura, zen: S.zen,
+    klick: S.klick, zack: S.zack,
+    verify: S.verifyPass,
+    djinn: { on: S.djinnOn, show: S.djinnShow },
+  }),
+};
+window.R = window.RUNTIME;
+
+console.log('%c◈ MOVE · SEIN · MAIN · ATEM · LEBEN geladen',
+  'color:#ffcc66;font-weight:bold;font-size:14px;');
+console.log('→ MOVE = echte Bewegung · SEIN = Zustand · MAIN = Loop-Kern');
+console.log('→ window.RUNTIME.move() · .sein() · .tick() · .pulse() · .state()');
 </script>
 </body>
 </html>
